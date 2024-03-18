@@ -1,0 +1,10 @@
+{
+  "extends": "@kalilasc/typescript-config/nodejs.json",
+    "compilerOptions": {
+    "baseUrl": ".",
+		"paths": {
+      "@/*": ["./src/*"],
+    }
+  },
+  "exclude": ["node_modules"]
+}
