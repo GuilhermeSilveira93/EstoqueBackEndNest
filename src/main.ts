@@ -16,16 +16,17 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
   const envService = app.get(EnvService);
+  await app.register(fastifyCookie, {
+    secret: envService.get('JWT_TOKEN'),
+  });
   await app.register(helmet);
-  app.enableCors({ methods: '*' });
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
     }),
   );
-  await app.register(fastifyCookie, {
-    secret: envService.get('JWT_TOKEN'),
-  });
+  app.enableCors({ methods: '*' });
+
   await app
     .listen(envService.get('PORT'), '0.0.0.0')
     .then(() => console.log(`App rodando na porta`));

@@ -1,0 +1,133 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
+  binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model st_cliente {
+  ID_CLIENTE Int     @id @default(autoincrement())
+  S_NOME     String? @db.VarChar(45)
+  S_ATIVO    String? @default("S") @db.VarChar(1)
+
+  ST_EMPRESA st_empresa @relation(fields: [ID_EMPRESA], references: [ID_EMPRESA], onUpdate: Cascade, onDelete: Cascade)
+  ID_EMPRESA Int        @db.Integer
+  ST_LOTE    st_lote[]
+
+  @@index([ID_EMPRESA])
+}
+
+model st_empresa {
+  ID_EMPRESA Int          @id @default(autoincrement())
+  S_NOME     String       @db.VarChar(45)
+  D_DATA     DateTime     @default(now()) @db.Timestamp(0)
+  S_ATIVO    String       @default("S") @db.VarChar(1)
+  ST_CLIENTE st_cliente[]
+}
+
+model st_fornecedor {
+  ID_FORNECEDOR Int     @id @default(autoincrement())
+  S_NOME        String? @db.VarChar(45)
+  S_ATIVO       String? @default("S") @db.VarChar(45)
+
+  ST_LOTE st_lote[]
+}
+
+model st_grupo {
+  ID_GRUPO Int     @id @default(autoincrement())
+  S_NOME   String  @db.VarChar(50)
+  N_NIVEL  Int?    @db.Integer
+  S_ATIVO  String? @db.VarChar(1)
+
+  ST_USUARIO st_usuario[]
+}
+
+model st_log_acesso {
+  ID_LOG_ACESSO Int      @id @default(autoincrement())
+  ID_USUARIO    Int      @db.Integer
+  S_EMAIL       String   @db.VarChar(150)
+  S_PERMITIDO   String   @db.VarChar(1)
+  D_DATA        DateTime @default(now()) @db.Timestamp(0)
+}
+
+model st_produto {
+  ID_PRODUTO Int     @id @default(autoincrement())
+  S_NOME     String? @db.VarChar(150)
+  S_ATIVO    String? @default("S") @db.Char(1)
+  N_SERIAL   String? @db.VarChar(45)
+
+  ST_TIPO         st_tipo           @relation(fields: [ID_TIPO], references: [ID_TIPO], onUpdate: Cascade, onDelete: Cascade)
+  ID_TIPO         Int               @db.Integer
+  ST_PRODUTO_LOTE st_produto_lote[]
+  vw_estoque      vw_estoque?
+
+  @@index([ID_TIPO])
+}
+
+model st_produto_lote {
+  ID_PRODUTO   Int
+  ID_LOTE      Int
+  N_QUANTIDADE Int     @db.Integer
+  S_DETALHES   String? @default("0") @db.VarChar(100)
+  S_DIMENSAO   String? @default("0") @db.VarChar(50)
+  N_VALOR      String? @default("0") @db.VarChar(20)
+
+  ST_PRODUTO st_produto @relation(fields: [ID_PRODUTO], references: [ID_PRODUTO])
+  ST_LOTE    st_lote    @relation(fields: [ID_LOTE], references: [ID_LOTE])
+
+  @@id([ID_PRODUTO, ID_LOTE])
+  @@index([ID_PRODUTO])
+  @@index([ID_LOTE])
+}
+
+model st_lote {
+  ID_LOTE       Int       @id @unique() @default(autoincrement())
+  D_DATA_INICIO DateTime? @default(now()) @db.Timestamp(0)
+  ID_FORNECEDOR Int?      @db.Integer
+  ID_CLIENTE    Int?      @db.Integer
+
+  ST_CLIENTE      st_cliente?       @relation(fields: [ID_CLIENTE], references: [ID_CLIENTE], onUpdate: Cascade, onDelete: Cascade)
+  ST_FORNECEDOR   st_fornecedor?    @relation(fields: [ID_FORNECEDOR], references: [ID_FORNECEDOR], onUpdate: Cascade, onDelete: Cascade)
+  ST_PRODUTO_LOTE st_produto_lote[]
+
+  @@index([ID_CLIENTE])
+  @@index([ID_FORNECEDOR])
+}
+
+model st_tipo {
+  ID_TIPO Int     @id @default(autoincrement())
+  S_NOME  String? @db.VarChar(45)
+  S_ATIVO String? @default("S") @db.VarChar(1)
+
+  ST_PRODUTO st_produto[]
+}
+
+model st_usuario {
+  ID_USUARIO         Int      @id @default(autoincrement())
+  S_NOME             String   @db.VarChar(150)
+  S_EMAIL            String   @db.VarChar(200)
+  S_SENHA            String   @db.VarChar(64)
+  ID_GRUPO           Int      @db.Integer
+  D_EXPIRACAO_SENHA  DateTime @db.Timestamp(0)
+  N_TENTATIVAS_LOGIN Int?     @default(0) @db.Integer
+  S_ATIVO            String?  @default("S") @db.VarChar(1)
+  S_CHAVE            String?  @db.VarChar(30)
+
+  ST_GRUPO st_grupo @relation(fields: [ID_GRUPO], references: [ID_GRUPO], onUpdate: Cascade, onDelete: Cascade)
+
+  @@index([ID_GRUPO])
+}
+
+view vw_estoque {
+  ID_PRODUTO Int      @unique @default(0)
+  QUANTIDADE Decimal? @db.Decimal(41, 0)
+
+  ST_PRODUTO st_produto @relation(fields: [ID_PRODUTO], references: [ID_PRODUTO])
+
+  @@index([ID_PRODUTO])
+}

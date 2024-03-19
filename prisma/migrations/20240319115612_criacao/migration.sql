@@ -1,0 +1,151 @@
+-- CreateTable
+CREATE TABLE "st_cliente" (
+    "ID_CLIENTE" SERIAL NOT NULL,
+    "S_NOME" VARCHAR(45),
+    "S_ATIVO" VARCHAR(1) DEFAULT 'S',
+    "ID_EMPRESA" INTEGER NOT NULL,
+
+    CONSTRAINT "st_cliente_pkey" PRIMARY KEY ("ID_CLIENTE")
+);
+
+-- CreateTable
+CREATE TABLE "st_empresa" (
+    "ID_EMPRESA" SERIAL NOT NULL,
+    "S_NOME" VARCHAR(45) NOT NULL,
+    "D_DATA" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "S_ATIVO" VARCHAR(1) NOT NULL DEFAULT 'S',
+
+    CONSTRAINT "st_empresa_pkey" PRIMARY KEY ("ID_EMPRESA")
+);
+
+-- CreateTable
+CREATE TABLE "st_fornecedor" (
+    "ID_FORNECEDOR" SERIAL NOT NULL,
+    "S_NOME" VARCHAR(45),
+    "S_ATIVO" VARCHAR(45) DEFAULT 'S',
+
+    CONSTRAINT "st_fornecedor_pkey" PRIMARY KEY ("ID_FORNECEDOR")
+);
+
+-- CreateTable
+CREATE TABLE "st_grupo" (
+    "ID_GRUPO" SERIAL NOT NULL,
+    "S_NOME" VARCHAR(50) NOT NULL,
+    "N_NIVEL" INTEGER,
+    "S_ATIVO" VARCHAR(1),
+
+    CONSTRAINT "st_grupo_pkey" PRIMARY KEY ("ID_GRUPO")
+);
+
+-- CreateTable
+CREATE TABLE "st_log_acesso" (
+    "ID_LOG_ACESSO" SERIAL NOT NULL,
+    "ID_USUARIO" INTEGER NOT NULL,
+    "S_EMAIL" VARCHAR(150) NOT NULL,
+    "S_PERMITIDO" VARCHAR(1) NOT NULL,
+    "D_DATA" TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "st_log_acesso_pkey" PRIMARY KEY ("ID_LOG_ACESSO")
+);
+
+-- CreateTable
+CREATE TABLE "st_produto" (
+    "ID_PRODUTO" SERIAL NOT NULL,
+    "S_NOME" VARCHAR(150),
+    "S_ATIVO" CHAR(1) DEFAULT 'S',
+    "N_SERIAL" VARCHAR(45),
+    "ID_TIPO" INTEGER NOT NULL,
+
+    CONSTRAINT "st_produto_pkey" PRIMARY KEY ("ID_PRODUTO")
+);
+
+-- CreateTable
+CREATE TABLE "st_produto_lote" (
+    "ID_PRODUTO" INTEGER NOT NULL,
+    "ID_LOTE" INTEGER NOT NULL,
+    "N_QUANTIDADE" INTEGER NOT NULL,
+    "S_DETALHES" VARCHAR(100) DEFAULT '0',
+    "S_DIMENSAO" VARCHAR(50) DEFAULT '0',
+    "N_VALOR" VARCHAR(20) DEFAULT '0',
+
+    CONSTRAINT "st_produto_lote_pkey" PRIMARY KEY ("ID_PRODUTO","ID_LOTE")
+);
+
+-- CreateTable
+CREATE TABLE "st_lote" (
+    "ID_LOTE" SERIAL NOT NULL,
+    "D_DATA_INICIO" TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP,
+    "ID_FORNECEDOR" INTEGER,
+    "ID_CLIENTE" INTEGER,
+
+    CONSTRAINT "st_lote_pkey" PRIMARY KEY ("ID_LOTE")
+);
+
+-- CreateTable
+CREATE TABLE "st_tipo" (
+    "ID_TIPO" SERIAL NOT NULL,
+    "S_NOME" VARCHAR(45),
+    "S_ATIVO" VARCHAR(1) DEFAULT 'S',
+
+    CONSTRAINT "st_tipo_pkey" PRIMARY KEY ("ID_TIPO")
+);
+
+-- CreateTable
+CREATE TABLE "st_usuario" (
+    "ID_USUARIO" SERIAL NOT NULL,
+    "S_NOME" VARCHAR(150) NOT NULL,
+    "S_EMAIL" VARCHAR(200) NOT NULL,
+    "S_SENHA" VARCHAR(64) NOT NULL,
+    "ID_GRUPO" INTEGER NOT NULL,
+    "D_EXPIRACAO_SENHA" TIMESTAMP(0) NOT NULL,
+    "N_TENTATIVAS_LOGIN" INTEGER DEFAULT 0,
+    "S_ATIVO" VARCHAR(1) DEFAULT 'S',
+    "S_CHAVE" VARCHAR(30),
+
+    CONSTRAINT "st_usuario_pkey" PRIMARY KEY ("ID_USUARIO")
+);
+
+-- CreateIndex
+CREATE INDEX "st_cliente_ID_EMPRESA_idx" ON "st_cliente"("ID_EMPRESA");
+
+-- CreateIndex
+CREATE INDEX "st_produto_ID_TIPO_idx" ON "st_produto"("ID_TIPO");
+
+-- CreateIndex
+CREATE INDEX "st_produto_lote_ID_PRODUTO_idx" ON "st_produto_lote"("ID_PRODUTO");
+
+-- CreateIndex
+CREATE INDEX "st_produto_lote_ID_LOTE_idx" ON "st_produto_lote"("ID_LOTE");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "st_lote_ID_LOTE_key" ON "st_lote"("ID_LOTE");
+
+-- CreateIndex
+CREATE INDEX "st_lote_ID_CLIENTE_idx" ON "st_lote"("ID_CLIENTE");
+
+-- CreateIndex
+CREATE INDEX "st_lote_ID_FORNECEDOR_idx" ON "st_lote"("ID_FORNECEDOR");
+
+-- CreateIndex
+CREATE INDEX "st_usuario_ID_GRUPO_idx" ON "st_usuario"("ID_GRUPO");
+
+-- AddForeignKey
+ALTER TABLE "st_cliente" ADD CONSTRAINT "st_cliente_ID_EMPRESA_fkey" FOREIGN KEY ("ID_EMPRESA") REFERENCES "st_empresa"("ID_EMPRESA") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "st_produto" ADD CONSTRAINT "st_produto_ID_TIPO_fkey" FOREIGN KEY ("ID_TIPO") REFERENCES "st_tipo"("ID_TIPO") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "st_produto_lote" ADD CONSTRAINT "st_produto_lote_ID_PRODUTO_fkey" FOREIGN KEY ("ID_PRODUTO") REFERENCES "st_produto"("ID_PRODUTO") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "st_produto_lote" ADD CONSTRAINT "st_produto_lote_ID_LOTE_fkey" FOREIGN KEY ("ID_LOTE") REFERENCES "st_lote"("ID_LOTE") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "st_lote" ADD CONSTRAINT "st_lote_ID_CLIENTE_fkey" FOREIGN KEY ("ID_CLIENTE") REFERENCES "st_cliente"("ID_CLIENTE") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "st_lote" ADD CONSTRAINT "st_lote_ID_FORNECEDOR_fkey" FOREIGN KEY ("ID_FORNECEDOR") REFERENCES "st_fornecedor"("ID_FORNECEDOR") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "st_usuario" ADD CONSTRAINT "st_usuario_ID_GRUPO_fkey" FOREIGN KEY ("ID_GRUPO") REFERENCES "st_grupo"("ID_GRUPO") ON DELETE CASCADE ON UPDATE CASCADE;
