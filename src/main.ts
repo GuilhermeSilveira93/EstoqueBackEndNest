@@ -7,8 +7,8 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 
+import { EnvService } from './@env/env.service';
 import { AppModule } from './app.module';
-import { EnvService } from './env/env.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -25,10 +25,15 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.enableCors({ methods: '*' });
+  app.enableCors({
+    origin: '*',
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: '*',
+  });
 
   await app
     .listen(envService.get('PORT'), '0.0.0.0')
-    .then(() => console.log(`App rodando na porta`));
+    .then(() => console.log(`App rodando na porta ${envService.get('PORT')}`));
 }
 bootstrap();

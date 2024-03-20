@@ -1,20 +1,21 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { EnvModule } from './env/env.module';
-import { envSchema } from './env/zod/env';
+import { EnvModule } from './@env/env.module';
+import { envSchema } from './@env/zod/env';
+import { PrismaModule } from './@prisma/prisma.module';
 import { UsuarioModule } from './http/routes/usuario/usuario.module';
-import { PrismaService } from './prisma/prisma.service';
 @Module({
   imports: [
+    EnvModule,
+    UsuarioModule,
+    PrismaModule,
     ConfigModule.forRoot({
       validate: (env) => envSchema.parse(env),
       isGlobal: true,
     }),
-    EnvModule,
-    UsuarioModule,
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [],
 })
 export class AppModule {}

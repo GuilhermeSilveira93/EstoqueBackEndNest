@@ -18,4 +18,3 @@ export const envSchema = z.object({
   PORT: z.string().default('3002'),
 });
 export type Env = z.infer<typeof envSchema>;
-export const EnvSchemaParse: Env = envSchema.parse(process.env);
