@@ -1,4 +1,5 @@
 import { PrismaService } from '@/@prisma/prisma/prisma.service';
+import { GetUserTypes } from '@/@types/Login';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
@@ -36,24 +37,19 @@ export class AuthService {
         },
       });
     } catch (error) {
-      return error;
+      return null;
     }
   }
   async login(req: LoginDto): Promise<{ token?: string; message: string }> {
     const { S_EMAIL, S_SENHA } = req.body;
-    const user = await this.getUser(S_EMAIL, S_SENHA);
+    const user: GetUserTypes = await this.getUser(S_EMAIL, S_SENHA);
 
-    if (user.code === 'P2025') {
+    if (user.code && user.code === 'P2025') {
       return { message: `E-mail ou Senha não encontrado: ${S_EMAIL}` };
     }
 
-    const payload = {
-      sub: user.ID_USUARIO,
-      ...user,
-    };
-
     return {
-      token: this.jwtService.sign(payload),
+      token: this.jwtService.sign(user),
       message: 'Login realizado com sucesso',
     };
   }
