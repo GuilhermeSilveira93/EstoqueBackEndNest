@@ -13,7 +13,8 @@ export class AuthController {
     @Res({ passthrough: true }) res: FastifyReply,
   ): Promise<{ data: { message: string; code: number } }> {
     const login = await this.authService.login(req);
-    console.log('tentando login')
+    console.log('tentando login');
+
     if (login.token) {
       return res.setCookie('token', login.token).send({
         message: login.message,
