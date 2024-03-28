@@ -1,3 +1,5 @@
+import { EnvModule } from '@/@env/env.module';
+import { EnvService } from '@/@env/env.service';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -7,9 +9,13 @@ import { JwtStrategyService } from './jwt-strategy/jwt-strategy.service';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: process.env.JWT_TOKEN,
-      signOptions: { expiresIn: '6 days' /*  algorithm: 'RS256' */ },
+    JwtModule.registerAsync({
+      imports: [EnvModule],
+      useFactory: async (envService: EnvService) => ({
+        secret: envService.get('JWT_TOKEN'),
+        signOptions: { expiresIn: '6 days' },
+      }),
+      inject: [EnvService],
     }),
   ],
   controllers: [AuthController],

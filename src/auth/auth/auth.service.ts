@@ -1,5 +1,4 @@
 import { PrismaService } from '@/@prisma/prisma/prisma.service';
-import { GetUserTypes } from '@/@types/Login';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
@@ -22,7 +21,6 @@ export class AuthService {
           S_EMAIL,
         },
       });
-      console.log('chave');
       const password = await bcrypt.hash(S_SENHA, chave.S_CHAVE);
 
       return await this.prismaService.st_usuario.findFirstOrThrow({
@@ -43,7 +41,7 @@ export class AuthService {
   }
   async login(req: LoginDto): Promise<{ token?: string; message: string }> {
     const { S_EMAIL, S_SENHA } = req.body;
-    const user: GetUserTypes = await this.getUser(S_EMAIL, S_SENHA);
+    const user = await this.getUser(S_EMAIL, S_SENHA);
 
     if (user.code === 'P2025') {
       return { message: `E-mail ou Senha não encontrado: ${S_EMAIL}` };
