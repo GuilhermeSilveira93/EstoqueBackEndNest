@@ -11,12 +11,12 @@ export class AuthController {
   async login(
     @Request() req: LoginDto,
     @Res({ passthrough: true }) res: FastifyReply,
-  ): Promise<{ data: { message: string; code: number } }> {
+  ): Promise<{ data: { message: string; code: number; token: string } }> {
     const login = await this.authService.login(req);
-    console.log('tentando login');
 
     if (login.token) {
       return res.setCookie('token', login.token).send({
+        token: login.token,
         message: login.message,
         code: 202,
       });
