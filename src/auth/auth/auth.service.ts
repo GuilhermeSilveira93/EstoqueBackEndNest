@@ -11,7 +11,15 @@ export class AuthService {
     private prismaService: PrismaService,
     private jwtService: JwtService,
   ) {}
-  async getUser(S_EMAIL: string, S_SENHA: string) {
+  async getUser(
+    S_EMAIL: string,
+    S_SENHA: string,
+  ): Promise<{
+    ID_USUARIO: number;
+    code?: string;
+    S_NOME: string;
+    ID_GRUPO: number;
+  }> {
     try {
       const chave = await this.prismaService.st_usuario.findFirstOrThrow({
         select: {
@@ -35,7 +43,7 @@ export class AuthService {
           S_ATIVO: 'S',
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       return error;
     }
   }
