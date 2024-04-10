@@ -1,3 +1,13 @@
 {
-  "extends": "@kalilasc/eslint-config/nodejs"
+  "extends": "@kalilasc/eslint-config/nodejs",
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "parser": "flow",
+        "endOfLine": "auto"
+      }
+    ]
+  }
 }
