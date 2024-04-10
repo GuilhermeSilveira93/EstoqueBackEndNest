@@ -5,6 +5,7 @@ import { EnvModule } from './@env/env.module';
 import { envSchema } from './@env/zod/env';
 import { PrismaModule } from './@prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { ProdutoModule } from './http/routes/produto/produto.module';
 import { UsuarioModule } from './http/routes/usuario/usuario.module';
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UsuarioModule } from './http/routes/usuario/usuario.module';
       validate: (env) => envSchema.parse(env),
       isGlobal: true,
     }),
+    ProdutoModule,
   ],
   controllers: [],
   providers: [],
