@@ -12,10 +12,10 @@ export class ProdutoController {
     await this.produtoService
       .ViewProdutos(req.query)
       .then((response) => {
-        res.status(202).send({ data: response });
+        res.status(202).send(response);
       })
       .catch(() => {
-        res.status(204).send({ data: [] });
+        res.status(204).send([]);
       });
   }
 }
