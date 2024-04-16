@@ -13,4 +13,8 @@ export class FindProdutoDto {
   @IsString({ message: 'Filtro Nome precisa ser String' })
   @IsOptional()
   Search?: string;
+
+  @IsString({ message: 'Filtro Nome precisa ser String' })
+  @IsOptional()
+  Page?: string;
 }

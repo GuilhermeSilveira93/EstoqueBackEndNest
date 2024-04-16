@@ -9,6 +9,7 @@ export class ProdutoController {
 
   @Get('tabela')
   async ViewEstoque(@Res() res: FastifyReply, @Req() req: FastifyRequest) {
+    console.log(req.query);
     await this.produtoService
       .ViewProdutos(req.query)
       .then((response) => {
