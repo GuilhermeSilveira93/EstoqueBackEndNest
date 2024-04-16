@@ -9,17 +9,17 @@ export class ProdutoController {
 
   @Get('tabela')
   async ViewEstoque(@Res() res: FastifyReply, @Req() req: FastifyRequest) {
-    console.log(req.query);
+    const totalProd = await this.produtoService.TotalProd(req.query);
     await this.produtoService
       .ViewProdutos(req.query)
       .then((response) => {
         if (response) {
-          res.status(202).send(response);
+          res.status(202).send({ data: response, total: totalProd });
         }
-        res.status(204).send([]);
+        res.status(204).send({ data: [], total: 0 });
       })
       .catch(() => {
-        res.status(204).send([]);
+        res.status(204).send({ data: [], total: 0 });
       });
   }
 }

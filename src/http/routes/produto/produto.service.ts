@@ -17,13 +17,22 @@ export class ProdutoService {
       and "P"."S_NOME" like '%'||${Search}||'%'
       and "P"."ID_PRODUTO" = case when cast(${Number(ID_PRODUTO)} as integer) is null then "P"."ID_PRODUTO" else cast(${ID_PRODUTO} as integer) end
       order by "P"."S_NOME"
-      limit 7
-	    offset ${Number(Page) * 7}
+      limit 10
+	    offset ${Number(Page) * 10}
     `;
 
       return teste;
     } catch (error) {
       console.log(error);
     }
+  }
+  async TotalProd(req: FindProdutoDto) {
+    const { S_ATIVO = 'S' } = req;
+
+    return await this.prismaService.st_produto.count({
+      where: {
+        S_ATIVO,
+      },
+    });
   }
 }
