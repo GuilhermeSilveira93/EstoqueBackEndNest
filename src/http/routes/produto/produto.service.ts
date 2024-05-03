@@ -22,9 +22,7 @@ export class ProdutoService {
     `;
 
       return teste;
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
   async TotalProd(req: FindProdutoDto) {
     const { S_ATIVO = 'S' } = req;
