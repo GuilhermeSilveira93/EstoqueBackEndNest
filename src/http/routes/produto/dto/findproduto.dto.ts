@@ -4,7 +4,7 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 export class FindProdutoDto {
   @IsNumber()
   @IsOptional()
-  ID_PRODUTO?: number;
+  ID_PRODUTO?: string;
 
   @IsString({ message: 'Filtro Ativo precisa ser String' })
   @IsOptional()
@@ -16,5 +16,9 @@ export class FindProdutoDto {
 
   @IsNumber()
   @IsOptional()
-  Page?: number;
+  Page?: string;
+
+  @IsNumber()
+  @IsOptional()
+  LimitPerPage?: string;
 }

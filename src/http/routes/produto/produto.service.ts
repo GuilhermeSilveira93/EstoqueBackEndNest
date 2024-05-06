@@ -8,7 +8,14 @@ import { FindProdutoDto } from './dto/findproduto.dto';
 export class ProdutoService {
   constructor(private prismaService: PrismaService) {}
   async ViewProdutos(req: FindProdutoDto): Promise<ProdutosTabela[]> {
-    const { S_ATIVO = 'S', ID_PRODUTO, Search = '', Page = 0 } = req;
+    const {
+      S_ATIVO = 'S',
+      ID_PRODUTO,
+      Search = '',
+      Page = '0',
+      LimitPerPage = '10',
+    } = req;
+
     try {
       const teste: ProdutosTabela[] = await this.prismaService.$queryRaw`
       select "P"."ID_PRODUTO", "P"."S_NOME" PRODUTO, cast(case when "E"."QTD" is null then 0 else "E"."QTD" end as integer) QUANTIDADE
@@ -17,8 +24,8 @@ export class ProdutoService {
       and "P"."S_NOME" like '%'||${Search}||'%'
       and "P"."ID_PRODUTO" = case when cast(${Number(ID_PRODUTO)} as integer) is null then "P"."ID_PRODUTO" else cast(${ID_PRODUTO} as integer) end
       order by "P"."S_NOME"
-      limit 10
-	    offset ${Number(Page) * 10}
+      limit ${parseInt(LimitPerPage)}
+	    offset ${Number(Page) * parseInt(LimitPerPage)}
     `;
 
       return teste;
