@@ -3,6 +3,7 @@ import { ProdutosTabela } from '@/@types/ProdutosTabela';
 import { Injectable } from '@nestjs/common';
 
 import { FindProdutoDto } from './dto/findproduto.dto';
+import { UpdateStProdutoDto } from './dto/update-st_produto.dto';
 
 @Injectable()
 export class ProdutoService {
@@ -18,7 +19,7 @@ export class ProdutoService {
 
     try {
       const teste: ProdutosTabela[] = await this.prismaService.$queryRaw`
-      select "P"."ID_PRODUTO", "P"."S_NOME" PRODUTO, cast(case when "E"."QTD" is null then 0 else "E"."QTD" end as integer) QUANTIDADE
+      select "P"."ID_PRODUTO", "P"."S_NOME" PRODUTO, cast(case when "E"."QTD" is null then 0 else "E"."QTD" end as integer) QUANTIDADE, "P"."S_ATIVO"
       from vw_estoque "E" right join st_produto "P" on "E"."ID_PRODUTO" = "P"."ID_PRODUTO"
       where "S_ATIVO" = ${S_ATIVO}
       and "P"."S_NOME" like '%'||${Search}||'%'
@@ -37,6 +38,19 @@ export class ProdutoService {
     return await this.prismaService.st_produto.count({
       where: {
         S_ATIVO,
+      },
+    });
+  }
+  async atualizarProd(req: UpdateStProdutoDto) {
+    const { ID_PRODUTO, S_NOME, S_ATIVO } = req;
+
+    return this.prismaService.st_produto.update({
+      where: {
+        ID_PRODUTO,
+      },
+      data: {
+        S_NOME,
+        S_ATIVO: S_ATIVO ? 'S' : 'N',
       },
     });
   }

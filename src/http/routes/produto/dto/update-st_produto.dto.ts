@@ -1,10 +1,10 @@
 import { PartialType } from '@nestjs/mapped-types';
 import {
+  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsString,
   Length,
-  MaxLength,
 } from 'class-validator';
 
 import { CreateStProdutoDto } from './create-st_produto.dto';
@@ -19,8 +19,7 @@ export class UpdateStProdutoDto extends PartialType(CreateStProdutoDto) {
   @Length(1, 150)
   S_NOME?: string;
 
-  @IsNotEmpty({ message: 'Nome é Obrigatório' })
-  @IsString()
-  @MaxLength(1)
-  S_ATIVO?: string;
+  @IsNotEmpty({ message: 'Ativo? é Obrigatório' })
+  @IsBoolean()
+  S_ATIVO?: boolean;
 }
