@@ -10,7 +10,7 @@ export class ProdutoService {
   constructor(private prismaService: PrismaService) {}
   async ViewProdutos(req: FindProdutoDto): Promise<ProdutosTabela[]> {
     const {
-      S_ATIVO = 'N',
+      S_ATIVO = 'S',
       ID_PRODUTO,
       Search = '',
       Page = '0',
