@@ -30,10 +30,9 @@ export class ProdutoController {
         .atualizarProd(req.body as UpdateStProdutoDto)
         .then((res) => console.log(res))
         .catch((error) => console.log(error));
-
-      return { message: 'Produto alterado com sucesso !' };
+      res.status(202).send({ message: 'Produto alterado com sucesso !' });
     } catch (error) {
-      return { message: error };
+      res.status(202).send({ message: error });
     }
   }
 }
