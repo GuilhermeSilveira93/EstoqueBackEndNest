@@ -23,7 +23,6 @@ export class AuthController {
 
     return res.code(409).send({
       message: login.message,
-      code: 409,
     });
   }
 }

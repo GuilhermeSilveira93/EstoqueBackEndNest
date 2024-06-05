@@ -50,10 +50,30 @@ export class AuthService {
   async login(req: LoginDto): Promise<{ token?: string; message: string }> {
     const { S_EMAIL, S_SENHA } = req.body;
     const user = await this.getUser(S_EMAIL, S_SENHA);
+    console.log('user: ', user);
+    const D_DATA = new Date();
+    D_DATA.setHours(D_DATA.getHours() - 3);
 
     if (user.code === 'P2025') {
+      await this.prismaService.st_log_acesso.create({
+        data: {
+          ID_USUARIO: 0,
+          S_EMAIL,
+          D_DATA,
+          S_PERMITIDO: 'N',
+        },
+      });
+
       return { message: `E-mail ou Senha não encontrado: ${S_EMAIL}` };
     }
+    await this.prismaService.st_log_acesso.create({
+      data: {
+        ID_USUARIO: user.ID_USUARIO,
+        S_EMAIL,
+        D_DATA,
+        S_PERMITIDO: 'S',
+      },
+    });
 
     const payload = {
       sub: user.ID_USUARIO,
