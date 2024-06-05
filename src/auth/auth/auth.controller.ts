@@ -15,7 +15,7 @@ export class AuthController {
     const login = await this.authService.login(req);
 
     if (login.token) {
-      return res.setCookie('token', login.token).send({
+      return res.setCookie('token', login.token).code(202).send({
         token: login.token,
         message: login.message,
       });

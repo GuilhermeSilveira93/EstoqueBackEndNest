@@ -23,6 +23,14 @@ export class ProdutoController {
         res.status(204).send({ data: [], total: 0 });
       });
   }
+  @Get('movimentacao')
+  async Movimentacao(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      const movimentacao = await this.produtoService.movimentacao(req.query);
+
+      return res.code(202).send(movimentacao);
+    } catch (error) {}
+  }
   @Patch()
   async atualizarProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {

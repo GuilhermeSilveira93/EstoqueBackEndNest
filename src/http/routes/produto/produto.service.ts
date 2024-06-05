@@ -54,4 +54,24 @@ export class ProdutoService {
       },
     });
   }
+  async movimentacao(req: any) {
+    return this.prismaService.st_lote.findMany({
+      select: {
+        ID_LOTE: true,
+        D_DATA_INICIO: true,
+        ID_FORNECEDOR: true,
+        ID_CLIENTE: true,
+        ST_PRODUTO_LOTE: {
+          select: {
+            N_QUANTIDADE: true,
+            ST_PRODUTO: {
+              select: {
+                S_NOME: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 }
