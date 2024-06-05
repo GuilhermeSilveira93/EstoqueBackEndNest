@@ -18,7 +18,6 @@ export class AuthController {
       return res.setCookie('token', login.token).send({
         token: login.token,
         message: login.message,
-        code: 202,
       });
     }
 
