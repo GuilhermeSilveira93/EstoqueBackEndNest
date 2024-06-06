@@ -27,7 +27,8 @@ export class ProdutoController {
   @Get('movimentacao')
   async Movimentacao(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const movimentacao = await this.produtoService.movimentacao(req.query);
+      const movimentacao = await this.produtoService.movimentacao();
+      console.log(movimentacao);
 
       return res.code(202).send(movimentacao);
     } catch (error) {}

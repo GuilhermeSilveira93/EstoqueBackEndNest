@@ -54,8 +54,8 @@ export class ProdutoService {
       },
     });
   }
-  async movimentacao(req: any) {
-    return this.prismaService.st_lote.findMany({
+  async movimentacao() {
+    const resposta = await this.prismaService.st_lote.findMany({
       select: {
         ID_LOTE: true,
         D_DATA_INICIO: true,
@@ -73,5 +73,41 @@ export class ProdutoService {
         },
       },
     });
+
+    return resposta.reduce(
+      (acc, data) => {
+        const date = new Date(data.D_DATA_INICIO);
+
+        const mesData: string = new Intl.DateTimeFormat('pt-BR', {
+          month: 'long',
+        }).format(date);
+
+        let mesObj = acc.meses.find((mes) => mes.name === mesData);
+
+        if (!mesObj) {
+          mesObj = { name: mesData, entrada: 0, saida: 0 };
+          acc.meses.push(mesObj);
+        }
+
+        if (data.ID_FORNECEDOR) {
+          data.ST_PRODUTO_LOTE.forEach((produtoLote) => {
+            acc.entrada += produtoLote.N_QUANTIDADE;
+            mesObj.entrada += produtoLote.N_QUANTIDADE;
+          });
+        } else {
+          data.ST_PRODUTO_LOTE.forEach((produtoLote) => {
+            acc.saida += produtoLote.N_QUANTIDADE;
+            mesObj.saida += produtoLote.N_QUANTIDADE;
+          });
+        }
+
+        return acc;
+      },
+      {
+        entrada: 0,
+        saida: 0,
+        meses: [] as { name: string; entrada: number; saida: number }[],
+      },
+    );
   }
 }
