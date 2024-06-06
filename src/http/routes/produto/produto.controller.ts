@@ -15,12 +15,13 @@ export class ProdutoController {
       .ViewProdutos(req.query)
       .then((response) => {
         if (response) {
-          res.status(202).send({ data: response, total: totalProd });
+          return res.status(202).send({ data: response, total: totalProd });
         }
-        res.status(204).send({ data: [], total: 0 });
+
+        return res.status(204).send({ data: [], total: 0 });
       })
       .catch(() => {
-        res.status(204).send({ data: [], total: 0 });
+        return res.status(204).send({ data: [], total: 0 });
       });
   }
   @Get('movimentacao')
@@ -34,13 +35,13 @@ export class ProdutoController {
   @Patch()
   async atualizarProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      await this.produtoService
-        .atualizarProd(req.body as UpdateStProdutoDto)
-        .then((res) => console.log(res))
-        .catch((error) => console.log(error));
-      res.status(202).send({ message: 'Produto alterado com sucesso !' });
+      await this.produtoService.atualizarProd(req.body as UpdateStProdutoDto);
+
+      return res
+        .status(202)
+        .send({ message: 'Produto alterado com sucesso !' });
     } catch (error) {
-      res.status(202).send({ message: error });
+      return res.status(202).send({ message: error });
     }
   }
 }

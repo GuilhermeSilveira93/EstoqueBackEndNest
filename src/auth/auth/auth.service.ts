@@ -50,7 +50,6 @@ export class AuthService {
   async login(req: LoginDto): Promise<{ token?: string; message: string }> {
     const { S_EMAIL, S_SENHA } = req.body;
     const user = await this.getUser(S_EMAIL, S_SENHA);
-    console.log('user: ', user);
     const D_DATA = new Date();
     D_DATA.setHours(D_DATA.getHours() - 3);
 
