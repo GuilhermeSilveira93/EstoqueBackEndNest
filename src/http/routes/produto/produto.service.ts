@@ -19,12 +19,12 @@ export class ProdutoService {
 
     try {
       const teste: ProdutosTabela[] = await this.prismaService.$queryRaw`
-      select "P"."ID_PRODUTO", "P"."S_NOME" PRODUTO, cast(case when "E"."QTD" is null then 0 else "E"."QTD" end as integer) QUANTIDADE, "P"."S_ATIVO"
-      from vw_estoque "E" right join st_produto "P" on "E"."ID_PRODUTO" = "P"."ID_PRODUTO"
-      where "S_ATIVO" = ${S_ATIVO}
-      and "P"."S_NOME" like '%'||${Search}||'%'
-      and "P"."ID_PRODUTO" = case when cast(${Number(ID_PRODUTO)} as integer) is null then "P"."ID_PRODUTO" else cast(${ID_PRODUTO} as integer) end
-      order by "P"."S_NOME"
+      select p.ID_PRODUTO, p.S_NOME PRODUTO, case when e.quantidade is null then 0 else e.quantidade end QUANTIDADE, P.S_ATIVO
+      from vw_estoque e right join st_produto p on e.id_produto = p.id_produto
+      where S_ATIVO = ${S_ATIVO}
+      and P.S_NOME like '%'||${Search}||'%'
+      and P.ID_PRODUTO = case when ${ID_PRODUTO} is null then P.ID_PRODUTO else ${ID_PRODUTO} end
+      order by P.S_NOME
       limit ${parseInt(LimitPerPage)}
 	    offset ${Number(Page) * parseInt(LimitPerPage)}
     `;
@@ -74,39 +74,70 @@ export class ProdutoService {
       },
     });
 
+    const viewMenorEstoque = await this.prismaService.vw_menor_estoque
+      .findMany({
+        select: {
+          ID_PRODUTO: true,
+          QUANTIDADE: true,
+          ST_PRODUTO: {
+            select: {
+              S_NOME: true,
+            },
+          },
+        },
+      })
+      .then((res) => {
+        console.log(res);
+
+        return res;
+      })
+      .catch((err) => console.log(err));
+
     return resposta.reduce(
       (acc, data) => {
         const date = new Date(data.D_DATA_INICIO);
+        const anoData = date.getFullYear().toString();
 
-        const mesData: string = new Intl.DateTimeFormat('pt-BR', {
+        const mesData = new Intl.DateTimeFormat('pt-BR', {
           month: 'long',
         }).format(date);
+        let anoObj = acc.anos.find((ano) => ano.ano === anoData);
 
-        let mesObj = acc.meses.find((mes) => mes.name === mesData);
+        if (!anoObj) {
+          anoObj = { ano: anoData, entrada: 0, saida: 0, meses: [] };
+          acc.anos.push(anoObj);
+        }
+        let mesObj = anoObj.meses.find((mes) => mes.name === mesData);
 
         if (!mesObj) {
           mesObj = { name: mesData, entrada: 0, saida: 0 };
-          acc.meses.push(mesObj);
+          anoObj.meses.push(mesObj);
         }
 
         if (data.ID_FORNECEDOR) {
           data.ST_PRODUTO_LOTE.forEach((produtoLote) => {
-            acc.entrada += produtoLote.N_QUANTIDADE;
+            acc.itensEstoque += produtoLote.N_QUANTIDADE;
             mesObj.entrada += produtoLote.N_QUANTIDADE;
+            anoObj.entrada += produtoLote.N_QUANTIDADE;
           });
         } else {
           data.ST_PRODUTO_LOTE.forEach((produtoLote) => {
-            acc.saida += produtoLote.N_QUANTIDADE;
+            acc.itensEstoque -= produtoLote.N_QUANTIDADE;
             mesObj.saida += produtoLote.N_QUANTIDADE;
+            anoObj.saida += produtoLote.N_QUANTIDADE;
           });
         }
 
         return acc;
       },
       {
-        entrada: 0,
-        saida: 0,
-        meses: [] as { name: string; entrada: number; saida: number }[],
+        itensEstoque: 0,
+        anos: [] as {
+          ano: string;
+          entrada: number;
+          saida: number;
+          meses: { name: string; entrada: number; saida: number }[];
+        }[],
       },
     );
   }

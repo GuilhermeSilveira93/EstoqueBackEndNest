@@ -5,9 +5,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model st_cliente {
@@ -16,7 +15,7 @@ model st_cliente {
   S_ATIVO    String? @default("S") @db.VarChar(1)
 
   ST_EMPRESA st_empresa @relation(fields: [ID_EMPRESA], references: [ID_EMPRESA], onUpdate: Cascade, onDelete: Cascade)
-  ID_EMPRESA Int        @db.Integer
+  ID_EMPRESA Int        @db.Int
   ST_LOTE    st_lote[]
 
   @@index([ID_EMPRESA])
@@ -41,7 +40,7 @@ model st_fornecedor {
 model st_grupo {
   ID_GRUPO Int     @id @default(autoincrement())
   S_NOME   String  @db.VarChar(50)
-  N_NIVEL  Int?    @db.Integer
+  N_NIVEL  Int?    @db.Int
   S_ATIVO  String? @db.VarChar(1)
 
   ST_USUARIO st_usuario[]
@@ -49,7 +48,7 @@ model st_grupo {
 
 model st_log_acesso {
   ID_LOG_ACESSO Int      @id @default(autoincrement())
-  ID_USUARIO    Int      @db.Integer
+  ID_USUARIO    Int      @db.Int
   S_EMAIL       String   @db.VarChar(150)
   S_PERMITIDO   String   @db.VarChar(1)
   D_DATA        DateTime @default(now()) @db.Timestamp(0)
@@ -61,10 +60,11 @@ model st_produto {
   S_ATIVO    String? @default("S") @db.Char(1)
   N_SERIAL   String? @db.VarChar(45)
 
-  ST_TIPO         st_tipo           @relation(fields: [ID_TIPO], references: [ID_TIPO], onUpdate: Cascade, onDelete: Cascade)
-  ID_TIPO         Int               @db.Integer
-  ST_PRODUTO_LOTE st_produto_lote[]
-  vw_estoque      vw_estoque?
+  ST_TIPO          st_tipo           @relation(fields: [ID_TIPO], references: [ID_TIPO], onUpdate: Cascade, onDelete: Cascade)
+  ID_TIPO          Int               @db.Int
+  ST_PRODUTO_LOTE  st_produto_lote[]
+  vw_estoque       vw_estoque?
+  vw_menor_estoque vw_menor_estoque?
 
   @@index([ID_TIPO])
 }
@@ -72,7 +72,7 @@ model st_produto {
 model st_produto_lote {
   ID_PRODUTO   Int
   ID_LOTE      Int
-  N_QUANTIDADE Int     @db.Integer
+  N_QUANTIDADE Int     @db.Int
   S_DETALHES   String? @default("0") @db.VarChar(100)
   S_DIMENSAO   String? @default("0") @db.VarChar(50)
   N_VALOR      String? @default("0") @db.VarChar(20)
@@ -88,8 +88,8 @@ model st_produto_lote {
 model st_lote {
   ID_LOTE       Int       @id @unique() @default(autoincrement())
   D_DATA_INICIO DateTime? @default(now()) @db.Timestamp(0)
-  ID_FORNECEDOR Int?      @db.Integer
-  ID_CLIENTE    Int?      @db.Integer
+  ID_FORNECEDOR Int?      @db.Int
+  ID_CLIENTE    Int?      @db.Int
 
   ST_CLIENTE      st_cliente?       @relation(fields: [ID_CLIENTE], references: [ID_CLIENTE], onUpdate: Cascade, onDelete: Cascade)
   ST_FORNECEDOR   st_fornecedor?    @relation(fields: [ID_FORNECEDOR], references: [ID_FORNECEDOR], onUpdate: Cascade, onDelete: Cascade)
@@ -112,9 +112,9 @@ model st_usuario {
   S_NOME             String   @db.VarChar(150)
   S_EMAIL            String   @db.VarChar(200)
   S_SENHA            String   @db.VarChar(64)
-  ID_GRUPO           Int      @db.Integer
+  ID_GRUPO           Int      @db.Int
   D_EXPIRACAO_SENHA  DateTime @db.Timestamp(0)
-  N_TENTATIVAS_LOGIN Int?     @default(0) @db.Integer
+  N_TENTATIVAS_LOGIN Int?     @default(0) @db.Int
   S_ATIVO            String?  @default("S") @db.VarChar(1)
   S_CHAVE            String?  @db.VarChar(30)
 
@@ -124,6 +124,15 @@ model st_usuario {
 }
 
 view vw_estoque {
+  ID_PRODUTO Int      @unique @default(0)
+  QUANTIDADE Decimal? @db.Decimal(41, 0)
+
+  ST_PRODUTO st_produto @relation(fields: [ID_PRODUTO], references: [ID_PRODUTO])
+
+  @@index([ID_PRODUTO])
+}
+
+view vw_menor_estoque {
   ID_PRODUTO Int      @unique @default(0)
   QUANTIDADE Decimal? @db.Decimal(41, 0)
 
