@@ -12,3 +12,8 @@ services:
       MYSQL_USER: cliente
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - /home/guiisilveira/.docker/data
+volumes:
+  mysql_data:
+    driver: local
