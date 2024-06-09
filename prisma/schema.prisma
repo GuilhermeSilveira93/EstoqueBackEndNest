@@ -52,6 +52,8 @@ model st_log_acesso {
   S_EMAIL       String   @db.VarChar(150)
   S_PERMITIDO   String   @db.VarChar(1)
   D_DATA        DateTime @default(now()) @db.Timestamp(0)
+
+  @@map("st_log_acesso")
 }
 
 model st_produto {
@@ -67,6 +69,7 @@ model st_produto {
   vw_menor_estoque vw_menor_estoque?
 
   @@index([ID_TIPO])
+  @@map("st_produto")
 }
 
 model st_produto_lote {
