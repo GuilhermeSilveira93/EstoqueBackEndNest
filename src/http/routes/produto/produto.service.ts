@@ -19,12 +19,12 @@ export class ProdutoService {
 
     try {
       const teste: ProdutosTabela[] = await this.prismaService.$queryRaw`
-      select p.ID_PRODUTO, p.S_NOME PRODUTO, case when e.quantidade is null then 0 else e.quantidade end QUANTIDADE, P.S_ATIVO
+      select p.ID_PRODUTO, p.S_NOME PRODUTO, case when e.quantidade is null then 0 else e.quantidade end QUANTIDADE, p.S_ATIVO
       from vw_estoque e right join st_produto p on e.id_produto = p.id_produto
       where S_ATIVO = ${S_ATIVO}
-      and P.S_NOME like '%'||${Search}||'%'
-      and P.ID_PRODUTO = case when ${ID_PRODUTO} is null then P.ID_PRODUTO else ${ID_PRODUTO} end
-      order by P.S_NOME
+      and p.S_NOME like '%'||${Search}||'%'
+      and p.ID_PRODUTO = case when ${ID_PRODUTO} is null then p.ID_PRODUTO else ${ID_PRODUTO} end
+      order by p.S_NOME
       limit ${parseInt(LimitPerPage)}
 	    offset ${Number(Page) * parseInt(LimitPerPage)}
     `;

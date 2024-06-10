@@ -10,19 +10,15 @@ export class ProdutoController {
 
   @Get('tabela')
   async ViewEstoque(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
-    const totalProd = await this.produtoService.TotalProd(req.query);
-    await this.produtoService
-      .ViewProdutos(req.query)
-      .then((response) => {
-        if (response) {
-          return res.status(202).send({ data: response, total: totalProd });
-        }
+    try {
+      const totalProd = await this.produtoService.TotalProd(req.query);
 
-        return res.status(204).send({ data: [], total: 0 });
-      })
-      .catch(() => {
-        return res.status(204).send({ data: [], total: 0 });
-      });
+      const produtos = await this.produtoService.ViewProdutos(req.query);
+
+      return res.status(200).send({ data: produtos, total: totalProd });
+    } catch (error) {
+      return res.status(409);
+    }
   }
   @Get('movimentacao')
   async Movimentacao(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
