@@ -1,19 +1,17 @@
 version: '3.8'
 
 services:
-  mysql:
-    image: mysqldb
+  db:
     build: .
+    image: mysqldb
     ports:
       - "3306:3306"
-    container_name: mysqlGuilherme
+    container_name: mysql-container
     environment:
       MYSQL_DATABASE: estoquedocker
       MYSQL_USER: cliente
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - /home/guiisilveira/.docker/data
-volumes:
-  mysql_data:
-    driver: local
+      - ./db/data:/var/lib/mysql
+    restart: always
