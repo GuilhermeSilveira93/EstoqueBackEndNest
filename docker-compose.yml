@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  db:
+  estoqueSoftrack:
     build: .
     image: mysqldb
     ports:
@@ -13,5 +13,5 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - ./db/data:/var/lib/mysql
+      - ./dataEstoque/data:/var/lib/mysql
     restart: always
