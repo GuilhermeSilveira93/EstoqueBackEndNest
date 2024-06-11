@@ -1,5 +1,5 @@
-import { Controller, Get, Res } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
+import { Controller, Post, Request, Res } from '@nestjs/common';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { UsuarioService } from './usuario.service';
 
@@ -7,8 +7,8 @@ import { UsuarioService } from './usuario.service';
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
-  @Get('/usuarios')
-  async todosOsUsuarios(@Res() res: FastifyReply) {
-    res.status(202).send(await this.usuarioService.todosOsUsuarios());
+  @Post('/usuarios')
+  async createUser(@Request() req: FastifyRequest, @Res() res: FastifyReply) {
+    res.status(202).send(await this.usuarioService.createUser());
   }
 }

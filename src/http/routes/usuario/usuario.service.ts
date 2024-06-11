@@ -3,5 +3,5 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class UsuarioService {
   constructor(private prisma: PrismaService) {}
-  async todosOsUsuarios() {}
+  async createUser() {}
 }

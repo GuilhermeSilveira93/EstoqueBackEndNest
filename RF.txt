@@ -1,0 +1,29 @@
+# RF
+- usuário pode visualizar uma tabela
+- usuário pode alterar um produto
+- usuário pode criar um produto
+- usuário pode cadastrar uma empresa
+- usuário pode cadastrar um cliente para a empresa
+- usuário pode cadastrar um fornecedor
+- usuário pode realizar movimentação no estoque
+- usuário pode criar um novo usuário.
+- usuário pode criar um novo Tipo para produtos.
+
+# RN
+- Tabela tem paginação, número máximo de itens e filtro por id_produto ou s_nome
+- alterar nome do produto deve ter no minimo 1 caractere, e pode desativa-lo.
+- criar empresa deve ter no minimo 1 caractere
+- criar cliente deve ter uma empresa
+- criar fornecedor deve ter no minimo 1 caractere
+- Movimentação Saida: Usuário pode criar uma lista de produtos, essa lista criará um lote no bd,
+                      os produtos terão relacionamento com lote através de produto_lote.
+                      Usuário deve selecionar uma empresa e um cliente para realizar a movimentação de saida para eles.
+                      Se a saida por para outro cliente, o usuário deve criar uma nova movimentação.
+- Movimentação Entrada: Usuário pode criar uma lista de produtos, essa lista criará um lote no bd,
+                        os produtos terão relacionamento com lote através de produto_lote.
+                        Usuário deve selecionar um fornecedor para realizar a movimentação de entrada para eles.
+
+
+# RNF
+- Dashboard
+- Relatórios
