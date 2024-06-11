@@ -7,7 +7,7 @@ import { UsuarioService } from './usuario.service';
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
-  @Post('/usuarios')
+  @Post('/criar')
   async createUser(@Request() req: FastifyRequest, @Res() res: FastifyReply) {
     res.status(202).send(await this.usuarioService.createUser());
   }

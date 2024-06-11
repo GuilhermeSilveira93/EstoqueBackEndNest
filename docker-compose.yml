@@ -3,10 +3,11 @@ version: '3.8'
 services:
   estoqueSoftrack:
     build: .
-    image: mysqldb
+    image: mysql
     ports:
       - "3306:3306"
-    container_name: mysql-container
+    container_name: mysql
+    
     environment:
       MYSQL_DATABASE: estoquedocker
       MYSQL_USER: cliente
