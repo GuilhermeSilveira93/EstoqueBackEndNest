@@ -2,7 +2,7 @@ import { PrismaService } from '@/@prisma/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 
-import { FilterUserDto } from './dto/filterUserDTO.dto';
+import { FilterUserDto } from './dto/filter-usuario.dto';
 import { UpdateUserDTO } from './dto/update-usuario.dto';
 @Injectable()
 export class UsuarioService {
@@ -98,5 +98,32 @@ export class UsuarioService {
       });
     }
   }
-  async createUser({ data }: { data: UpdateUserDTO }) {}
+  async createUser(data: UpdateUserDTO) {
+    const { S_EMAIL, S_NOME, ID_GRUPO, S_SENHA: senha } = data;
+    const D_EXPIRACAO_SENHA = new Date();
+    D_EXPIRACAO_SENHA.setFullYear(D_EXPIRACAO_SENHA.getFullYear() + 1);
+    D_EXPIRACAO_SENHA.setHours(D_EXPIRACAO_SENHA.getHours() - 3);
+    const S_CHAVE = await bcrypt.genSalt(8);
+    const S_SENHA = await bcrypt.hash(senha, S_CHAVE);
+    console.log('aqui');
+
+    return await this.prisma.st_usuario
+      .create({
+        data: {
+          S_NOME,
+          S_EMAIL,
+          S_SENHA,
+          ID_GRUPO,
+          D_EXPIRACAO_SENHA,
+          S_CHAVE,
+          S_ATIVO: 'S',
+        },
+      })
+      .then((res) => {
+        console.log(res);
+
+        return res;
+      })
+      .catch((err) => console.log(err));
+  }
 }

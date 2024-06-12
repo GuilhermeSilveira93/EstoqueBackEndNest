@@ -1,7 +1,7 @@
 import { Controller, Get, Patch, Post, Req, Res } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { FilterUserDto } from './dto/filterUserDTO.dto';
+import { FilterUserDto } from './dto/filter-usuario.dto';
 import { UpdateUserDTO } from './dto/update-usuario.dto';
 import { UsuarioService } from './usuario.service';
 
@@ -34,10 +34,11 @@ export class UsuarioController {
   @Post()
   async criarUsuario(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const data = req.body as UpdateUserDTO;
-    await this.usuarioService.createUser({
-      data,
-    });
+    console.log(data);
+    try {
+      await this.usuarioService.createUser(data);
 
-    return res.status(202).send({ message: 'Usuario alterado com sucesso !' });
+      return res.status(202).send({ message: 'Usuario criado com sucesso !' });
+    } catch (error) {}
   }
 }
