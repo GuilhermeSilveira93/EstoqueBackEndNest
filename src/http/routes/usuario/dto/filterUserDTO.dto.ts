@@ -1,5 +1,6 @@
 import { MaxLength, IsString, IsNotEmpty, IsOptional } from 'class-validator';
-export class GetAllUserDto {
+
+export class FilterUserDto {
   @IsString()
   @IsNotEmpty({ message: 'ID do usuário é obrigatório' })
   ID_USUARIO: string;

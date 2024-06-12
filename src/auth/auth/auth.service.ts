@@ -19,6 +19,9 @@ export class AuthService {
     code?: string;
     S_NOME: string;
     ID_GRUPO: number;
+    ST_GRUPO: {
+      N_NIVEL: number;
+    };
   }> {
     try {
       const chave = await this.prismaService.st_usuario.findFirstOrThrow({
@@ -36,6 +39,11 @@ export class AuthService {
           ID_USUARIO: true,
           S_NOME: true,
           ID_GRUPO: true,
+          ST_GRUPO: {
+            select: {
+              N_NIVEL: true,
+            },
+          },
         },
         where: {
           S_EMAIL,

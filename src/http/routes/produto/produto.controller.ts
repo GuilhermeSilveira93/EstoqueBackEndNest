@@ -11,11 +11,9 @@ export class ProdutoController {
   @Get('tabela')
   async ViewEstoque(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const totalProd = await this.produtoService.TotalProd(req.query);
+      const consulta = await this.produtoService.ViewProdutos(req.query);
 
-      const produtos = await this.produtoService.ViewProdutos(req.query);
-
-      return res.status(200).send({ data: produtos, total: totalProd });
+      return res.status(200).send(consulta);
     } catch (error) {
       return res.status(409);
     }

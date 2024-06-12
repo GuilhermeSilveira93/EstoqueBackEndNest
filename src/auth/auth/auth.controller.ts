@@ -1,4 +1,4 @@
-import { Controller, Post, Request, Res } from '@nestjs/common';
+import { Controller, Post, Req, Res } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
 import { AuthService } from './auth.service';
@@ -9,7 +9,7 @@ export class AuthController {
   constructor(readonly authService: AuthService) {}
   @Post('login')
   async login(
-    @Request() req: LoginDto,
+    @Req() req: LoginDto,
     @Res({ passthrough: true }) res: FastifyReply,
   ): Promise<{ data: { message: string; code: number; token: string } }> {
     const login = await this.authService.login(req);

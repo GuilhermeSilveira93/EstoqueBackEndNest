@@ -7,8 +7,10 @@ import { UpdateStProdutoDto } from './dto/update-st_produto.dto';
 
 @Injectable()
 export class ProdutoService {
-  constructor(private prismaService: PrismaService) {}
-  async ViewProdutos(req: FindProdutoDto): Promise<ProdutosTabela[]> {
+  constructor(private prisma: PrismaService) {}
+  async ViewProdutos(
+    req: FindProdutoDto,
+  ): Promise<{ data: ProdutosTabela[]; total: number }> {
     const {
       S_ATIVO = 'S',
       ID_PRODUTO,
@@ -18,7 +20,13 @@ export class ProdutoService {
     } = req;
 
     try {
-      const teste: ProdutosTabela[] = await this.prismaService.$queryRaw`
+      const total = await this.prisma.st_produto.count({
+        where: {
+          S_ATIVO,
+        },
+      });
+
+      const produtosTabela: ProdutosTabela[] = await this.prisma.$queryRaw`
       select p.ID_PRODUTO, p.S_NOME PRODUTO, case when e.quantidade is null then 0 else e.quantidade end QUANTIDADE, p.S_ATIVO
       from vw_estoque e right join st_produto p on e.id_produto = p.id_produto
       where S_ATIVO = ${S_ATIVO}
@@ -29,22 +37,13 @@ export class ProdutoService {
 	    offset ${Number(Page) * parseInt(LimitPerPage)}
     `;
 
-      return teste;
+      return { data: produtosTabela, total };
     } catch (error) {}
-  }
-  async TotalProd(req: FindProdutoDto) {
-    const { S_ATIVO = 'S' } = req;
-
-    return await this.prismaService.st_produto.count({
-      where: {
-        S_ATIVO,
-      },
-    });
   }
   async atualizarProd(req: UpdateStProdutoDto) {
     const { ID_PRODUTO, S_NOME, S_ATIVO } = req;
 
-    return this.prismaService.st_produto.update({
+    return this.prisma.st_produto.update({
       where: {
         ID_PRODUTO,
       },
@@ -55,7 +54,7 @@ export class ProdutoService {
     });
   }
   async movimentacao() {
-    const resposta = await this.prismaService.st_lote.findMany({
+    const resposta = await this.prisma.st_lote.findMany({
       select: {
         ID_LOTE: true,
         D_DATA_INICIO: true,
@@ -74,7 +73,7 @@ export class ProdutoService {
       },
     });
 
-    const viewMenorEstoque = await this.prismaService.vw_menor_estoque
+    const viewMenorEstoque = await this.prisma.vw_menor_estoque
       .findMany({
         select: {
           ID_PRODUTO: true,
