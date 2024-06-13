@@ -34,11 +34,14 @@ export class UsuarioController {
   @Post()
   async criarUsuario(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const data = req.body as UpdateUserDTO;
-    console.log(data);
     try {
       await this.usuarioService.createUser(data);
 
       return res.status(202).send({ message: 'Usuario criado com sucesso !' });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+
+      return res.status(404).send({ message: 'algo deu errado' });
+    }
   }
 }
