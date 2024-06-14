@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { GrupoModule } from './http/routes/grupo/grupo.module';
 import { ProdutoModule } from './http/routes/produto/produto.module';
 import { UsuarioModule } from './http/routes/usuario/usuario.module';
+import { TiposModule } from './http/routes/tipos/tipos.module';
+import { EmpresaModule } from './http/routes/empresa/empresa.module';
 @Module({
   imports: [
     EnvModule,
@@ -20,6 +22,8 @@ import { UsuarioModule } from './http/routes/usuario/usuario.module';
     UsuarioModule,
     ProdutoModule,
     GrupoModule,
+    TiposModule,
+    EmpresaModule,
   ],
   controllers: [],
   providers: [],

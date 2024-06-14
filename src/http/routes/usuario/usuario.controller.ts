@@ -39,8 +39,6 @@ export class UsuarioController {
 
       return res.status(202).send({ message: 'Usuario criado com sucesso !' });
     } catch (error) {
-      console.log(error);
-
       return res.status(404).send({ message: 'algo deu errado' });
     }
   }

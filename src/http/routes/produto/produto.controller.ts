@@ -11,11 +11,9 @@ export class ProdutoController {
   @Post()
   async createProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const consulta = await this.produtoService.createProd(
-        req.query as TypesProdutoDto,
-      );
+      await this.produtoService.createProd(req.body as TypesProdutoDto);
 
-      return res.status(200).send(consulta);
+      return res.status(202).send({ message: 'Produto criado com sucesso !' });
     } catch (error) {
       return res.status(409);
     }
@@ -48,10 +46,15 @@ export class ProdutoController {
       return res.code(202).send(movimentacao);
     } catch (error) {}
   }
-  @Patch()
+  @Patch(':ID_PRODUTO')
   async atualizarProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    const params = req.params as { ID_PRODUTO: string };
+    const data = req.body as UpdateStProdutoDto;
     try {
-      await this.produtoService.atualizarProd(req.body as UpdateStProdutoDto);
+      await this.produtoService.atualizarProd({
+        data,
+        ID_PRODUTO: Number(params.ID_PRODUTO),
+      });
 
       return res
         .status(202)

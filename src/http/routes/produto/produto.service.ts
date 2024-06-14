@@ -11,29 +11,56 @@ export class ProdutoService {
   constructor(private prisma: PrismaService) {}
   async createProd(req: TypesProdutoDto) {
     const { S_NOME, ID_TIPO, N_SERIAL } = req;
-    await this.prisma.st_produto.create({
-      data: {
-        S_NOME,
-        ID_TIPO,
-        N_SERIAL,
-      },
-    });
+    try {
+      return await this.prisma.st_produto.create({
+        data: {
+          S_NOME,
+          ID_TIPO,
+          N_SERIAL,
+        },
+      });
+    } catch (error) {
+      return error;
+    }
   }
   async produtos(req: FindProdutoDto) {
-    const { S_ATIVO = 'S', ID_PRODUTO } = req;
+    const {
+      ID_PRODUTO,
+      Search,
+      Page = '0',
+      LimitPerPage = '10',
+      S_ATIVO = 'S',
+    } = req;
+    const calculoSkip = Number(LimitPerPage) * (Number(Page) - 1);
+    const skip = calculoSkip < 0 ? 0 : calculoSkip;
 
     const total = await this.prisma.st_produto.count({
       where: {
         S_ATIVO,
+        S_NOME: { contains: Search },
         ID_PRODUTO: ID_PRODUTO ? Number(ID_PRODUTO) : undefined,
       },
     });
 
     const produtos = await this.prisma.st_produto.findMany({
+      select: {
+        ID_PRODUTO: true,
+        S_NOME: true,
+        ID_TIPO: true,
+        N_SERIAL: true,
+        S_ATIVO: true,
+        ST_TIPO: {
+          select: { S_NOME: true },
+        },
+      },
       where: {
         S_ATIVO,
+        S_NOME: { contains: Search },
         ID_PRODUTO: ID_PRODUTO ? Number(ID_PRODUTO) : undefined,
       },
+      take: Number(LimitPerPage),
+      skip,
+      orderBy: { S_NOME: 'asc' },
     });
 
     return { data: produtos, total };
@@ -57,7 +84,7 @@ export class ProdutoService {
       });
 
       const produtosTabela: ProdutosTabela[] = await this.prisma.$queryRaw`
-      select p.ID_PRODUTO, p.S_NOME PRODUTO, case when e.quantidade is null then 0 else e.quantidade end QUANTIDADE, p.S_ATIVO
+      select p.ID_PRODUTO, p.S_NOME PRODUTO, case when e.qtd is null then 0 else e.qtd end QUANTIDADE, p.S_ATIVO
       from vw_estoque e right join st_produto p on e.id_produto = p.id_produto
       where S_ATIVO = ${S_ATIVO}
       and p.S_NOME like '%'||${Search}||'%'
@@ -70,16 +97,24 @@ export class ProdutoService {
       return { data: produtosTabela, total };
     } catch (error) {}
   }
-  async atualizarProd(req: UpdateStProdutoDto) {
-    const { ID_PRODUTO, S_NOME, S_ATIVO } = req;
+  async atualizarProd({
+    data,
+    ID_PRODUTO,
+  }: {
+    data: UpdateStProdutoDto;
+    ID_PRODUTO: number;
+  }) {
+    const { S_NOME, S_ATIVO, ID_TIPO, N_SERIAL } = data;
 
     return this.prisma.st_produto.update({
-      where: {
-        ID_PRODUTO,
-      },
       data: {
         S_NOME,
+        N_SERIAL,
         S_ATIVO: S_ATIVO ? 'S' : 'N',
+        ID_TIPO: ID_TIPO ? Number(ID_TIPO) : undefined,
+      },
+      where: {
+        ID_PRODUTO,
       },
     });
   }

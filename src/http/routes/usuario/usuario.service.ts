@@ -99,32 +99,23 @@ export class UsuarioService {
     }
   }
   async createUser(data: UpdateUserDTO) {
-    console.log(data);
     const { S_EMAIL, S_NOME, ID_GRUPO, S_SENHA: senha } = data;
-    console.log(senha);
     const D_EXPIRACAO_SENHA = new Date();
     D_EXPIRACAO_SENHA.setFullYear(D_EXPIRACAO_SENHA.getFullYear() + 1);
     D_EXPIRACAO_SENHA.setHours(D_EXPIRACAO_SENHA.getHours() - 3);
     const S_CHAVE = await bcrypt.genSalt(8);
     const S_SENHA = await bcrypt.hash(senha, S_CHAVE);
 
-    return await this.prisma.st_usuario
-      .create({
-        data: {
-          S_NOME,
-          S_EMAIL,
-          S_SENHA,
-          ID_GRUPO,
-          D_EXPIRACAO_SENHA,
-          S_CHAVE,
-          S_ATIVO: 'S',
-        },
-      })
-      .then((res) => {
-        console.log(res);
-
-        return res;
-      })
-      .catch((err) => console.log(err));
+    return await this.prisma.st_usuario.create({
+      data: {
+        S_NOME,
+        S_EMAIL,
+        S_SENHA,
+        ID_GRUPO,
+        D_EXPIRACAO_SENHA,
+        S_CHAVE,
+        S_ATIVO: 'S',
+      },
+    });
   }
 }
