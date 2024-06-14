@@ -6,8 +6,9 @@ import {
   IsOptional,
   ValidateNested,
   IsArray,
+  IsNumber,
 } from 'class-validator';
-export class TypesStProdutoDto {
+export class TypesProdutoDto {
   @MaxLength(255)
   @IsString()
   @IsNotEmpty({ message: 'Nome obrigatório' })
@@ -18,13 +19,13 @@ export class TypesStProdutoDto {
   @MaxLength(45)
   N_SERIAL?: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty({ message: 'Tipo obrigatório' })
-  ID_TIPO: string;
+  ID_TIPO: number;
 }
-export class CreateStProdutoDto {
+export class CreateProdutoDto {
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => TypesStProdutoDto)
-  DADOS: TypesStProdutoDto[];
+  @Type(() => TypesProdutoDto)
+  DADOS: TypesProdutoDto[];
 }

@@ -2,13 +2,43 @@ import { PrismaService } from '@/@prisma/prisma/prisma.service';
 import { ProdutosTabela } from '@/@types/ProdutosTabela';
 import { Injectable } from '@nestjs/common';
 
+import { TypesProdutoDto } from './dto/create-st_produto.dto';
 import { FindProdutoDto } from './dto/findproduto.dto';
 import { UpdateStProdutoDto } from './dto/update-st_produto.dto';
 
 @Injectable()
 export class ProdutoService {
   constructor(private prisma: PrismaService) {}
-  async ViewProdutos(
+  async createProd(req: TypesProdutoDto) {
+    const { S_NOME, ID_TIPO, N_SERIAL } = req;
+    await this.prisma.st_produto.create({
+      data: {
+        S_NOME,
+        ID_TIPO,
+        N_SERIAL,
+      },
+    });
+  }
+  async produtos(req: FindProdutoDto) {
+    const { S_ATIVO = 'S', ID_PRODUTO } = req;
+
+    const total = await this.prisma.st_produto.count({
+      where: {
+        S_ATIVO,
+        ID_PRODUTO: ID_PRODUTO ? Number(ID_PRODUTO) : undefined,
+      },
+    });
+
+    const produtos = await this.prisma.st_produto.findMany({
+      where: {
+        S_ATIVO,
+        ID_PRODUTO: ID_PRODUTO ? Number(ID_PRODUTO) : undefined,
+      },
+    });
+
+    return { data: produtos, total };
+  }
+  async viewProdutos(
     req: FindProdutoDto,
   ): Promise<{ data: ProdutosTabela[]; total: number }> {
     const {

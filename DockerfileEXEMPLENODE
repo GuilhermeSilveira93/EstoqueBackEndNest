@@ -1,10 +1,35 @@
-FROM mysql:latest
+# Use a imagem oficial do Node.js como base
+FROM node:latest
 
 LABEL maintainer=GuilhermeSilveira
-# Definindo variáveis de ambiente para configurar o MySQL
+
+# Instale MySQL
+RUN apt-get update && apt-get install -y mysql-server
+
+# Defina variáveis de ambiente para configurar o MySQL
 ENV MYSQL_ROOT_PASSWORD=root
 ENV MYSQL_DATABASE=estoquedocker
 ENV MYSQL_USER=root
 ENV MYSQL_PASSWORD=root
-# Expondo a porta 3306
-EXPOSE 3306
+
+# Exponha a porta 3306 para MySQL e a porta 3000 para a aplicação Node.js
+EXPOSE 3306 3000
+
+# Crie um script de inicialização do MySQL
+RUN echo '#!/bin/bash\n\
+service mysql start\n\
+mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS estoquedocker;"\n\
+mysql -uroot -proot -e "CREATE USER IF NOT EXISTS '\''root'\''@'\''%'\'' IDENTIFIED BY '\''root'\'';"\n\
+mysql -uroot -proot -e "GRANT ALL PRIVILEGES ON *.* TO '\''root'\''@'\''%'\'';"\n\
+mysql -uroot -proot -e "FLUSH PRIVILEGES;"\n\
+tail -f /dev/null' > /usr/local/bin/startup.sh && chmod +x /usr/local/bin/startup.sh
+
+# Copie seu código Node.js para o contêiner
+COPY . /app
+WORKDIR /app
+
+# Instale as dependências do Node.js
+RUN npm install
+
+# Comando para rodar a aplicação Node.js e iniciar o MySQL
+CMD ["sh", "-c", "service mysql start && npm start"]

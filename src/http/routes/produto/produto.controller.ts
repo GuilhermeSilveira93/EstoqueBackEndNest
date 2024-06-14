@@ -1,17 +1,39 @@
-import { Controller, Get, Req, Res, Patch } from '@nestjs/common';
+import { Controller, Get, Req, Res, Patch, Post } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
+import { TypesProdutoDto } from './dto/create-st_produto.dto';
 import { UpdateStProdutoDto } from './dto/update-st_produto.dto';
 import { ProdutoService } from './produto.service';
 
 @Controller('produto')
 export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}
+  @Post()
+  async createProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      const consulta = await this.produtoService.createProd(
+        req.query as TypesProdutoDto,
+      );
 
+      return res.status(200).send(consulta);
+    } catch (error) {
+      return res.status(409);
+    }
+  }
+  @Get()
+  async produtos(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      const consulta = await this.produtoService.produtos(req.query);
+
+      return res.status(200).send(consulta);
+    } catch (error) {
+      return res.status(409);
+    }
+  }
   @Get('tabela')
   async ViewEstoque(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const consulta = await this.produtoService.ViewProdutos(req.query);
+      const consulta = await this.produtoService.viewProdutos(req.query);
 
       return res.status(200).send(consulta);
     } catch (error) {
