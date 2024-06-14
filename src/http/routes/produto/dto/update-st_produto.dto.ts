@@ -7,9 +7,9 @@ import {
   Length,
 } from 'class-validator';
 
-import { CreateStProdutoDto } from './create-st_produto.dto';
+import { CreateProdutoDto } from './create-st_produto.dto';
 
-export class UpdateStProdutoDto extends PartialType(CreateStProdutoDto) {
+export class UpdateStProdutoDto extends PartialType(CreateProdutoDto) {
   @IsNotEmpty({ message: 'ID é Obrigatório' })
   @IsNumber()
   ID_PRODUTO: number;
