@@ -2,14 +2,14 @@ import { PrismaService } from '@/@prisma/prisma/prisma.service';
 import { ProdutosTabela } from '@/@types/ProdutosTabela';
 import { Injectable } from '@nestjs/common';
 
-import { TypesProdutoDto } from './dto/create-st_produto.dto';
+import { CreateProdutoDTO } from './dto/create-st_produto.dto';
 import { FindProdutoDto } from './dto/findproduto.dto';
 import { UpdateStProdutoDto } from './dto/update-st_produto.dto';
 
 @Injectable()
 export class ProdutoService {
   constructor(private prisma: PrismaService) {}
-  async createProd(req: TypesProdutoDto) {
+  async createProd(req: CreateProdutoDTO) {
     const { S_NOME, ID_TIPO, N_SERIAL } = req;
     try {
       return await this.prisma.st_produto.create({
@@ -20,7 +20,7 @@ export class ProdutoService {
         },
       });
     } catch (error) {
-      return error;
+      throw new Error(error);
     }
   }
   async produtos(req: FindProdutoDto) {

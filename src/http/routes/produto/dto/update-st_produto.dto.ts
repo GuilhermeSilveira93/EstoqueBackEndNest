@@ -1,9 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { IsBoolean, IsNotEmpty, IsNumber } from 'class-validator';
 
-import { TypesProdutoDto } from './create-st_produto.dto';
+import { CreateProdutoDTO } from './create-st_produto.dto';
 
-export class UpdateStProdutoDto extends PartialType(TypesProdutoDto) {
+export class UpdateStProdutoDto extends PartialType(CreateProdutoDTO) {
   @IsNotEmpty({ message: 'ID é Obrigatório' })
   @IsNumber()
   ID_PRODUTO: number;

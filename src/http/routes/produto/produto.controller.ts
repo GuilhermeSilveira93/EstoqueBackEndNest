@@ -1,7 +1,7 @@
 import { Controller, Get, Req, Res, Patch, Post } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { TypesProdutoDto } from './dto/create-st_produto.dto';
+import { CreateProdutoDTO } from './dto/create-st_produto.dto';
 import { UpdateStProdutoDto } from './dto/update-st_produto.dto';
 import { ProdutoService } from './produto.service';
 
@@ -11,11 +11,11 @@ export class ProdutoController {
   @Post()
   async createProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      await this.produtoService.createProd(req.body as TypesProdutoDto);
+      await this.produtoService.createProd(req.body as CreateProdutoDTO);
 
       return res.status(202).send({ message: 'Produto criado com sucesso !' });
     } catch (error) {
-      return res.status(409);
+      return res.status(409).send({ message: JSON.stringify(error) });
     }
   }
   @Get()

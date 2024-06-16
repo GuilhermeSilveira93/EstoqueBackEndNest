@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsNumber,
 } from 'class-validator';
-export class TypesProdutoDto {
+export class CreateProdutoDTO {
   @MaxLength(255)
   @IsString()
   @IsNotEmpty({ message: 'Nome obrigatório' })
