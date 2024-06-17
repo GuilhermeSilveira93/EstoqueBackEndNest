@@ -89,11 +89,11 @@ model st_produto_lote {
 }
 
 model st_lote {
-  ID_LOTE       Int       @id @unique() @default(autoincrement())
-  D_DATA_INICIO DateTime? @default(now()) @db.Timestamp(0)
-  ID_FORNECEDOR Int?      @db.Int
-  ID_CLIENTE    Int?      @db.Int
-
+  ID_LOTE         Int               @id @unique() @default(autoincrement())
+  D_DATA_INICIO   DateTime?         @default(now()) @db.Timestamp(0)
+  ID_FORNECEDOR   Int?              @db.Int
+  ID_CLIENTE      Int?              @db.Int
+  S_ATIVO         String?           @default("S") @db.Char(1)
   ST_CLIENTE      st_cliente?       @relation(fields: [ID_CLIENTE], references: [ID_CLIENTE], onUpdate: Cascade, onDelete: Cascade)
   ST_FORNECEDOR   st_fornecedor?    @relation(fields: [ID_FORNECEDOR], references: [ID_FORNECEDOR], onUpdate: Cascade, onDelete: Cascade)
   ST_PRODUTO_LOTE st_produto_lote[]

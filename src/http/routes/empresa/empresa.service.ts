@@ -1,7 +1,9 @@
 import { PrismaService } from '@/@prisma/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 
+import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { FindEmpresaDto } from './dto/findEmpresa.dto';
+import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 
 @Injectable()
 export class EmpresaService {
@@ -37,5 +39,29 @@ export class EmpresaService {
     });
 
     return { data: consulta, total };
+  }
+  async createEmpresa(req: CreateEmpresaDto) {
+    return await this.prisma.st_empresa.create({
+      data: req,
+    });
+  }
+  async attEmpresa({
+    ID_EMPRESA,
+    data,
+  }: {
+    ID_EMPRESA: number;
+    data: UpdateEmpresaDto;
+  }) {
+    try {
+      await this.prisma.st_empresa.update({
+        data: {
+          S_ATIVO: data.S_ATIVO ? 'S' : 'N',
+          S_NOME: data.S_NOME,
+        },
+        where: {
+          ID_EMPRESA,
+        },
+      });
+    } catch (error) {}
   }
 }
