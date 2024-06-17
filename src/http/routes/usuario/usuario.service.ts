@@ -37,7 +37,7 @@ export class UsuarioService {
       },
       where: {
         ID_USUARIO: ID_USUARIO ? Number(ID_USUARIO) : undefined,
-        S_ATIVO,
+        S_ATIVO: undefined,
         S_NOME: { contains: Search },
       },
       take: Number(LimitPerPage),
