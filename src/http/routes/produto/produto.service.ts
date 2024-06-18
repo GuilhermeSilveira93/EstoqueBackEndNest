@@ -20,7 +20,7 @@ export class ProdutoService {
         },
       });
     } catch (error) {
-      throw new Error(error);
+      throw new Error(JSON.stringify(error));
     }
   }
   async produtos(req: FindProdutoDto) {
@@ -82,6 +82,8 @@ export class ProdutoService {
           S_ATIVO,
         },
       });
+      const calculoSkip = parseInt(LimitPerPage) * Number(Page) - 1;
+      const skip = calculoSkip < 0 ? 0 : calculoSkip;
 
       const produtosTabela: ProdutosTabela[] = await this.prisma.$queryRaw`
       select p.ID_PRODUTO, p.S_NOME PRODUTO, case when e.qtd is null then 0 else e.qtd end QUANTIDADE, p.S_ATIVO
@@ -91,7 +93,7 @@ export class ProdutoService {
       and p.ID_PRODUTO = case when ${ID_PRODUTO} is null then p.ID_PRODUTO else ${ID_PRODUTO} end
       order by p.S_NOME
       limit ${parseInt(LimitPerPage)}
-	    offset ${Number(Page) * parseInt(LimitPerPage)}
+	    offset ${skip}
     `;
 
       return { data: produtosTabela, total };
