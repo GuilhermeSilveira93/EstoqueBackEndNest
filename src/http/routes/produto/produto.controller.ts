@@ -15,10 +15,10 @@ export class ProdutoController {
 
       return res.status(202).send({ message: 'Produto criado com sucesso!' });
     } catch (err) {
-      console.log('error!', err);
+      console.log(err);
 
       return res.status(409).send({
-        message: 'Erro de referência: Produto não pôde ser criado.',
+        message: err,
       });
     }
   }

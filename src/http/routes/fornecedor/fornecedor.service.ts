@@ -1,7 +1,9 @@
 import { PrismaService } from '@/@prisma/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 
+import { CreateFornecedorDto } from './dto/create-fornecedor.dto';
 import { FindFornecedorDto } from './dto/findFornecedor.dto';
+import { UpdateFornecedorDto } from './dto/update-fornecedor.dto';
 
 @Injectable()
 export class FornecedorService {
@@ -37,5 +39,25 @@ export class FornecedorService {
     });
 
     return { data: consulta, total };
+  }
+  async editFornecedor({
+    ID_FORNECEDOR,
+    data,
+  }: {
+    ID_FORNECEDOR: number;
+    data: UpdateFornecedorDto;
+  }) {
+    return await this.prisma.st_fornecedor.update({
+      data: {
+        ...data,
+        S_ATIVO: data.S_ATIVO ? 'S' : 'N',
+      },
+      where: { ID_FORNECEDOR },
+    });
+  }
+  async createFornecedor(data: CreateFornecedorDto) {
+    return await this.prisma.st_fornecedor.create({
+      data,
+    });
   }
 }

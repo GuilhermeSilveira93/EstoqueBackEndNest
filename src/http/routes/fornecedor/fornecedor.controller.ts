@@ -1,6 +1,8 @@
-import { Controller, Get, Res, Req } from '@nestjs/common';
+import { Controller, Get, Res, Req, Patch, Post } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
+import { CreateFornecedorDto } from './dto/create-fornecedor.dto';
+import { UpdateFornecedorDto } from './dto/update-fornecedor.dto';
 import { FornecedorService } from './fornecedor.service';
 @Controller('fornecedor')
 export class FornecedorController {
@@ -14,6 +16,43 @@ export class FornecedorController {
       return res.status(202).send(consulta);
     } catch (error) {
       return res.status(404);
+    }
+  }
+  @Patch(':ID_FORNECEDOR')
+  async editFornecedor(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    const params = req.params as { ID_FORNECEDOR: string };
+    const data = req.body as UpdateFornecedorDto;
+    console.log('data');
+    console.log(data);
+    try {
+      await this.fornecedorService.editFornecedor({
+        ID_FORNECEDOR: Number(params.ID_FORNECEDOR),
+        data,
+      });
+
+      return res
+        .status(202)
+        .send({ message: 'Fornecedor atualizado com sucesso!' });
+    } catch (error) {
+      return res.status(409);
+    }
+  }
+  @Post()
+  async createFornecedor(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      await this.fornecedorService.createFornecedor(
+        req.body as CreateFornecedorDto,
+      );
+
+      return res
+        .status(202)
+        .send({ message: 'Fornecedor criado com sucesso!' });
+    } catch (err) {
+      console.log('error!', err);
+
+      return res.status(409).send({
+        message: 'Erro de referência: Fornecedor não pôde ser criado.',
+      });
     }
   }
 }

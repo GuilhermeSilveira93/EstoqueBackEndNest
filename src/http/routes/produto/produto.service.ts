@@ -12,17 +12,13 @@ export class ProdutoService {
   async createProd(req: CreateProdutoDTO) {
     const { S_NOME, ID_TIPO, N_SERIAL } = req;
 
-    return await this.prisma.st_produto
-      .create({
-        data: {
-          S_NOME,
-          ID_TIPO,
-          N_SERIAL,
-        },
-      })
-      .catch((err) => {
-        throw new Error(JSON.stringify(err));
-      });
+    return await this.prisma.st_produto.create({
+      data: {
+        S_NOME: 1151,
+        ID_TIPO,
+        N_SERIAL,
+      },
+    });
   }
   async produtos(req: FindProdutoDto) {
     const {
@@ -141,24 +137,24 @@ export class ProdutoService {
       },
     });
 
-    const viewMenorEstoque = await this.prisma.vw_menor_estoque
-      .findMany({
-        select: {
-          ID_PRODUTO: true,
-          QUANTIDADE: true,
-          ST_PRODUTO: {
-            select: {
-              S_NOME: true,
-            },
-          },
-        },
-      })
-      .then((res) => {
-        console.log(res);
+    // const viewMenorEstoque = await this.prisma.vw_menor_estoque
+    //   .findMany({
+    //     select: {
+    //       ID_PRODUTO: true,
+    //       QUANTIDADE: true,
+    //       ST_PRODUTO: {
+    //         select: {
+    //           S_NOME: true,
+    //         },
+    //       },
+    //     },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
 
-        return res;
-      })
-      .catch((err) => console.log(err));
+    //     return res;
+    //   })
+    //   .catch((err) => console.log(err));
 
     return resposta.reduce(
       (acc, data) => {
