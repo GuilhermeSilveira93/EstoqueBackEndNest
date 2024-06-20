@@ -11,17 +11,18 @@ export class ProdutoService {
   constructor(private prisma: PrismaService) {}
   async createProd(req: CreateProdutoDTO) {
     const { S_NOME, ID_TIPO, N_SERIAL } = req;
-    try {
-      return await this.prisma.st_produto.create({
+
+    return await this.prisma.st_produto
+      .create({
         data: {
           S_NOME,
           ID_TIPO,
           N_SERIAL,
         },
+      })
+      .catch((err) => {
+        throw new Error(JSON.stringify(err));
       });
-    } catch (error) {
-      throw new Error(JSON.stringify(error));
-    }
   }
   async produtos(req: FindProdutoDto) {
     const {

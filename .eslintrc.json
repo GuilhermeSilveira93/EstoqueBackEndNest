@@ -1,6 +1,8 @@
 {
   "extends": "@kalilasc/eslint-config/nodejs",
   "rules": {
+    "no-unused-vars": "warn", 
+    "no-console":"off",
     "prettier/prettier": [
       "error",
       {

@@ -13,9 +13,13 @@ export class ProdutoController {
     try {
       await this.produtoService.createProd(req.body as CreateProdutoDTO);
 
-      return res.status(202).send({ message: 'Produto criado com sucesso !' });
-    } catch (error) {
-      return res.status(409).send({ message: JSON.stringify(error) });
+      return res.status(202).send({ message: 'Produto criado com sucesso!' });
+    } catch (err) {
+      console.log('error!', err);
+
+      return res.status(409).send({
+        message: 'Erro de referência: Produto não pôde ser criado.',
+      });
     }
   }
   @Get()
