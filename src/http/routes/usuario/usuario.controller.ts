@@ -16,20 +16,34 @@ export class UsuarioController {
       );
 
       return res.status(202).send(consulta);
-    } catch (error) {
-      return res.status(202).send({ message: error });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(409).send({
+        message: err,
+      });
     }
   }
   @Patch(':ID_USUARIO')
   async atualizarUsuario(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const params = req.params as { ID_USUARIO: string };
     const data = req.body as UpdateUserDTO;
-    await this.usuarioService.updateUser({
-      ID_USUARIO: Number(params.ID_USUARIO),
-      data,
-    });
+    try {
+      await this.usuarioService.updateUser({
+        ID_USUARIO: Number(params.ID_USUARIO),
+        data,
+      });
 
-    return res.status(202).send({ message: 'Usuario alterado com sucesso !' });
+      return res
+        .status(202)
+        .send({ message: 'Usuario alterado com sucesso !' });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(409).send({
+        message: err,
+      });
+    }
   }
   @Post()
   async criarUsuario(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
@@ -38,8 +52,12 @@ export class UsuarioController {
       await this.usuarioService.createUser(data);
 
       return res.status(202).send({ message: 'Usuario criado com sucesso !' });
-    } catch (error) {
-      return res.status(404).send({ message: 'algo deu errado' });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(409).send({
+        message: err,
+      });
     }
   }
 }

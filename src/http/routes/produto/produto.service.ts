@@ -12,13 +12,17 @@ export class ProdutoService {
   async createProd(req: CreateProdutoDTO) {
     const { S_NOME, ID_TIPO, N_SERIAL } = req;
 
-    return await this.prisma.st_produto.create({
-      data: {
-        S_NOME: 1151,
-        ID_TIPO,
-        N_SERIAL,
-      },
-    });
+    return await this.prisma.st_produto
+      .create({
+        data: {
+          S_NOME,
+          ID_TIPO,
+          N_SERIAL,
+        },
+      })
+      .catch((err) => {
+        throw new Error(JSON.stringify(err));
+      });
   }
   async produtos(req: FindProdutoDto) {
     const {
@@ -79,7 +83,7 @@ export class ProdutoService {
           S_ATIVO,
         },
       });
-      const calculoSkip = parseInt(LimitPerPage) * Number(Page) - 1;
+      const calculoSkip = parseInt(LimitPerPage) * (Number(Page) - 1);
       const skip = calculoSkip < 0 ? 0 : calculoSkip;
 
       const produtosTabela: ProdutosTabela[] = await this.prisma.$queryRaw`

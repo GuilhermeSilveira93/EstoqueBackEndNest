@@ -2,6 +2,7 @@ import { Controller, Get, Req, Res, Patch, Post } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { CreateProdutoDTO } from './dto/create-st_produto.dto';
+import { FindProdutoDto } from './dto/findproduto.dto';
 import { UpdateStProdutoDto } from './dto/update-st_produto.dto';
 import { ProdutoService } from './produto.service';
 
@@ -28,18 +29,28 @@ export class ProdutoController {
       const consulta = await this.produtoService.produtos(req.query);
 
       return res.status(200).send(consulta);
-    } catch (error) {
-      return res.status(409);
+    } catch (err) {
+      console.log(err);
+
+      return res.status(409).send({
+        message: err,
+      });
     }
   }
   @Get('tabela')
   async ViewEstoque(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const consulta = await this.produtoService.viewProdutos(req.query);
+      const consulta = await this.produtoService.viewProdutos(
+        req.query as FindProdutoDto,
+      );
 
       return res.status(200).send(consulta);
-    } catch (error) {
-      return res.status(409);
+    } catch (err) {
+      console.log(err);
+
+      return res.status(409).send({
+        message: err,
+      });
     }
   }
   @Get('movimentacao')
@@ -48,7 +59,13 @@ export class ProdutoController {
       const movimentacao = await this.produtoService.movimentacao();
 
       return res.code(202).send(movimentacao);
-    } catch (error) {}
+    } catch (err) {
+      console.log(err);
+
+      return res.status(409).send({
+        message: err,
+      });
+    }
   }
   @Patch(':ID_PRODUTO')
   async atualizarProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
@@ -63,8 +80,12 @@ export class ProdutoController {
       return res
         .status(202)
         .send({ message: 'Produto alterado com sucesso !' });
-    } catch (error) {
-      return res.status(202).send({ message: error });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(409).send({
+        message: err,
+      });
     }
   }
 }

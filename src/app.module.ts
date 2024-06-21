@@ -11,6 +11,7 @@ import { GrupoModule } from './http/routes/grupo/grupo.module';
 import { ProdutoModule } from './http/routes/produto/produto.module';
 import { TiposModule } from './http/routes/tipos/tipos.module';
 import { UsuarioModule } from './http/routes/usuario/usuario.module';
+import { ClienteModule } from './http/routes/cliente/cliente.module';
 @Module({
   imports: [
     EnvModule,
@@ -26,6 +27,7 @@ import { UsuarioModule } from './http/routes/usuario/usuario.module';
     TiposModule,
     EmpresaModule,
     FornecedorModule,
+    ClienteModule,
   ],
   controllers: [],
   providers: [],
