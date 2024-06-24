@@ -16,7 +16,7 @@ export class EmpresaController {
 
       return res.status(202).send(consulta);
     } catch (error) {
-      return res.status(404);
+      return res.status(204).send({ message: 'Algo deu errado!' });
     }
   }
   @Post()
@@ -39,6 +39,8 @@ export class EmpresaController {
         ID_EMPRESA: Number(params.ID_EMPRESA),
         data,
       });
+
+      return res.status(204).send({ message: 'Algo deu errado!' });
 
       return res
         .status(202)
