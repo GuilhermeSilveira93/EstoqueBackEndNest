@@ -40,13 +40,11 @@ export class EmpresaController {
         data,
       });
 
-      return res.status(204).send({ message: 'Algo deu errado!' });
-
       return res
         .status(202)
         .send({ message: 'Empresa alterado com sucesso !' });
     } catch (error) {
-      return res.status(204).send({ message: 'Algo deu errado!' });
+      return res.status(409).send({ message: 'Algo deu errado!' });
     }
   }
 }

@@ -30,8 +30,6 @@ export class ProdutoController {
 
       return res.status(200).send(consulta);
     } catch (err) {
-      console.log(err);
-
       return res.status(409).send({
         message: err,
       });
@@ -71,6 +69,8 @@ export class ProdutoController {
   async atualizarProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const params = req.params as { ID_PRODUTO: string };
     const data = req.body as UpdateStProdutoDto;
+
+    return res.status(409);
     try {
       await this.produtoService.atualizarProd({
         data,
