@@ -70,7 +70,6 @@ export class ProdutoController {
     const params = req.params as { ID_PRODUTO: string };
     const data = req.body as UpdateStProdutoDto;
 
-    return res.status(409);
     try {
       await this.produtoService.atualizarProd({
         data,
@@ -84,7 +83,7 @@ export class ProdutoController {
       console.log(err);
 
       return res.status(409).send({
-        message: err,
+        message: (err as Error).message,
       });
     }
   }
