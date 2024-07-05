@@ -1,34 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Res, Req, Patch } from '@nestjs/common';
+import { FastifyReply, FastifyRequest } from 'fastify';
+
 import { ClienteService } from './cliente.service';
-import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
 
 @Controller('cliente')
 export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}
 
-  @Post()
-  create(@Body() createClienteDto: CreateClienteDto) {
-    return this.clienteService.create(createClienteDto);
-  }
-
   @Get()
-  findAll() {
-    return this.clienteService.findAll();
-  }
+  async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      const consulta = await this.clienteService.findAll(req.query);
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.clienteService.findOne(+id);
+      return res.status(202).send(consulta);
+    } catch (error) {
+      return res.status(204).send({ message: 'Algo deu errado!' });
+    }
   }
+  @Patch(':ID_CLIENTE')
+  async attEmpresa(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    const params = req.params as { ID_CLIENTE: string };
+    const data = req.body as UpdateClienteDto;
+    try {
+      await this.clienteService.attCliente({
+        ID_CLIENTE: Number(params.ID_CLIENTE),
+        data,
+      });
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClienteDto: UpdateClienteDto) {
-    return this.clienteService.update(+id, updateClienteDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.clienteService.remove(+id);
+      return res
+        .status(202)
+        .send({ message: 'Cliente alterado com sucesso !' });
+    } catch (error) {
+      return res.status(409).send({ message: 'Algo deu errado!' });
+    }
   }
 }
