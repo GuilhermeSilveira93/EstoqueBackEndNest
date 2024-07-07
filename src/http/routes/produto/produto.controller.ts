@@ -1,4 +1,5 @@
 import { Controller, Get, Req, Res, Patch, Post } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { CreateProdutoDTO } from './dto/create-st_produto.dto';
@@ -69,7 +70,12 @@ export class ProdutoController {
   async atualizarProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const params = req.params as { ID_PRODUTO: string };
     const data = req.body as UpdateStProdutoDto;
+    let cookie = req.cookies.sessionId;
 
+    if (!cookie) {
+      cookie = randomUUID();
+      res.cookie('sessionId', cookie, { path: '/' });
+    }
     try {
       await this.produtoService.atualizarProd({
         data,
