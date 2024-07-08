@@ -6,6 +6,7 @@ import { FilterUserDto } from './dto/filter-usuario.dto';
 import { UpdateUserDTO } from './dto/update-usuario.dto';
 @Injectable()
 export class UsuarioService {
+  // eslint-disable-next-line no-unused-vars
   constructor(private prisma: PrismaService) {}
   async getAll(req: FilterUserDto) {
     const {
