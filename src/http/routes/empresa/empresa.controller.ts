@@ -10,9 +10,19 @@ export class EmpresaController {
   constructor(private readonly empresaService: EmpresaService) {}
 
   @Get()
+  async findWithParams(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      const consulta = await this.empresaService.findWithParams(req.query);
+
+      return res.status(202).send(consulta);
+    } catch (error) {
+      return res.status(204).send({ message: 'Algo deu errado!' });
+    }
+  }
+  @Get('all')
   async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const consulta = await this.empresaService.findAll(req.query);
+      const consulta = await this.empresaService.findAll();
 
       return res.status(202).send(consulta);
     } catch (error) {

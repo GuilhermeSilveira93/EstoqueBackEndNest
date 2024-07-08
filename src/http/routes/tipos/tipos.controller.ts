@@ -11,11 +11,25 @@ export class TiposController {
   constructor(private readonly tiposService: TiposService) {}
 
   @Get()
-  async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+  async findWithParams(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const consulta = await this.tiposService.findAll(
+      const consulta = await this.tiposService.findWithParams(
         req.query as FindTipoDto,
       );
+
+      return res.status(200).send(consulta);
+    } catch (err) {
+      console.log(err);
+
+      return res.status(409).send({
+        message: err,
+      });
+    }
+  }
+  @Get('all')
+  async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      const consulta = await this.tiposService.findAll();
 
       return res.status(200).send(consulta);
     } catch (err) {

@@ -1,19 +1,30 @@
-import { Controller, Get, Res, Req, Patch } from '@nestjs/common';
+import { Controller, Get, Res, Req, Patch, Post } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { ClienteService } from './cliente.service';
+import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
 
 @Controller('cliente')
 export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}
-
   @Get()
   async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
       const consulta = await this.clienteService.findAll(req.query);
 
       return res.status(202).send(consulta);
+    } catch (error) {
+      return res.status(204).send({ message: 'Algo deu errado!' });
+    }
+  }
+  @Post()
+  async createCliente(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    const data = req.body as CreateClienteDto;
+    try {
+      await this.clienteService.createCliente(data);
+
+      return res.status(202).send({ message: 'cliente criada com sucesso !' });
     } catch (error) {
       return res.status(204).send({ message: 'Algo deu errado!' });
     }

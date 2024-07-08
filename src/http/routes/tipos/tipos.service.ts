@@ -8,7 +8,24 @@ import { UpdateTipoDto } from './dto/updatetipo.dto';
 @Injectable()
 export class TiposService {
   constructor(private prisma: PrismaService) {}
-  async findAll(req: FindTipoDto) {
+  async findAll() {
+    const total = await this.prisma.st_tipo.count({
+      where: {
+        S_ATIVO: 'S',
+      },
+      orderBy: { S_NOME: 'asc' },
+    });
+
+    const consulta = await this.prisma.st_tipo.findMany({
+      where: {
+        S_ATIVO: 'S',
+      },
+      orderBy: { S_NOME: 'asc' },
+    });
+
+    return { data: consulta, total };
+  }
+  async findWithParams(req: FindTipoDto) {
     const {
       ID_TIPO,
       Search,

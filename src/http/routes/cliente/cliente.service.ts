@@ -1,6 +1,7 @@
 import { PrismaService } from '@/@prisma/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 
+import { CreateClienteDto } from './dto/create-cliente.dto';
 import { FindClienteDto } from './dto/findCliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
 
@@ -45,6 +46,9 @@ export class ClienteService {
         S_NOME: { contains: Search },
         ID_CLIENTE: ID_CLIENTE ? Number(ID_CLIENTE) : undefined,
         ID_EMPRESA: ID_EMPRESA ? Number(ID_EMPRESA) : undefined,
+        ST_EMPRESA: {
+          S_ATIVO,
+        },
       },
       take: Number(LimitPerPage),
       skip,
@@ -79,6 +83,18 @@ export class ClienteService {
         },
         where: {
           ID_CLIENTE,
+        },
+      });
+    } catch (error) {}
+  }
+  async createCliente(req: CreateClienteDto) {
+    const { ID_EMPRESA, S_NOME } = req;
+
+    try {
+      await this.prisma.st_cliente.create({
+        data: {
+          S_NOME,
+          ID_EMPRESA,
         },
       });
     } catch (error) {}
