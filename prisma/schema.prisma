@@ -9,45 +9,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model st_cliente {
-  ID_CLIENTE Int     @id @default(autoincrement())
-  S_NOME     String? @db.VarChar(45)
-  S_ATIVO    String? @default("S") @db.VarChar(1)
+model ST_CLIENTE {
+  ID_CLIENTE String    @id @default(uuid())
+  S_NOME     String?   @db.VarChar(45)
+  S_ATIVO    String?   @default("S") @db.Char(1)
+  ST_LOTE    ST_LOTE[]
 
-  ST_EMPRESA st_empresa @relation(fields: [ID_EMPRESA], references: [ID_EMPRESA], onUpdate: Cascade, onDelete: Cascade)
-  ID_EMPRESA Int        @db.Int
-  ST_LOTE    st_lote[]
+  ST_EMPRESA ST_EMPRESA @relation(fields: [ID_EMPRESA], references: [ID_EMPRESA])
+  ID_EMPRESA String
 
-  @@index([ID_EMPRESA])
+  @@map("st_cliente")
 }
 
-model st_empresa {
-  ID_EMPRESA Int          @id @default(autoincrement())
+model ST_EMPRESA {
+  ID_EMPRESA String       @id @default(uuid())
   S_NOME     String       @db.VarChar(45)
   D_DATA     DateTime     @default(now()) @db.Timestamp(0)
-  S_ATIVO    String       @default("S") @db.VarChar(1)
-  ST_CLIENTE st_cliente[]
+  S_ATIVO    String?      @default("S") @db.Char(1)
+  ST_CLIENTE ST_CLIENTE[]
+
+  @@map("st_empresa")
 }
 
-model st_fornecedor {
-  ID_FORNECEDOR Int     @id @default(autoincrement())
-  S_NOME        String? @db.VarChar(45)
-  S_ATIVO       String? @default("S") @db.VarChar(45)
+model ST_FORNECEDOR {
+  ID_FORNECEDOR String    @id @default(uuid())
+  S_NOME        String?   @db.VarChar(45)
+  S_ATIVO       String?   @default("S") @db.Char(1)
+  ST_LOTE       ST_LOTE[]
 
-  ST_LOTE st_lote[]
+  @@map("st_fornecedor")
 }
 
-model st_grupo {
-  ID_GRUPO Int     @id @default(autoincrement())
-  S_NOME   String  @db.VarChar(50)
-  N_NIVEL  Int?    @db.Int
-  S_ATIVO  String? @db.VarChar(1)
-
-  ST_USUARIO st_usuario[]
-}
-
-model st_log_acesso {
-  ID_LOG_ACESSO Int      @id @default(autoincrement())
+model ST_LOG_ACESSO {
+  ID_LOG_ACESSO String   @id @default(uuid())
   ID_USUARIO    Int      @db.Int
   S_EMAIL       String   @db.VarChar(150)
   S_PERMITIDO   String   @db.VarChar(1)
@@ -56,90 +50,81 @@ model st_log_acesso {
   @@map("st_log_acesso")
 }
 
-model st_produto {
-  ID_PRODUTO Int     @id @default(autoincrement())
+model ST_PRODUTO {
+  ID_PRODUTO String  @id @default(uuid())
   S_NOME     String? @db.VarChar(150)
   S_ATIVO    String? @default("S") @db.Char(1)
   N_SERIAL   String? @db.VarChar(45)
 
-  ST_TIPO          st_tipo           @relation(fields: [ID_TIPO], references: [ID_TIPO], onUpdate: Cascade, onDelete: Cascade)
-  ID_TIPO          Int               @db.Int
-  ST_PRODUTO_LOTE  st_produto_lote[]
-  vw_estoque       vw_estoque?
-  vw_menor_estoque vw_menor_estoque?
+  ST_TIPO ST_TIPO @relation(fields: [ID_TIPO], references: [ID_TIPO])
+  ID_TIPO String
 
-  @@index([ID_TIPO])
+  ST_PRODUTO_LOTE ST_PRODUTO_LOTE[]
+
   @@map("st_produto")
 }
 
-model st_produto_lote {
-  ID_PRODUTO   Int
-  ID_LOTE      Int
-  N_QUANTIDADE Int     @db.Int
-  S_DETALHES   String? @default("0") @db.VarChar(100)
-  S_DIMENSAO   String? @default("0") @db.VarChar(50)
-  N_VALOR      String? @default("0") @db.VarChar(20)
+model ST_PRODUTO_LOTE {
+  ID_PRODUTO_LOTE String @id @default(uuid())
 
-  ST_PRODUTO st_produto @relation(fields: [ID_PRODUTO], references: [ID_PRODUTO])
-  ST_LOTE    st_lote    @relation(fields: [ID_LOTE], references: [ID_LOTE])
+  N_QUANTIDADE Int      @db.Int
+  S_DETALHES   String?  @default("") @db.VarChar(100)
+  S_DIMENSAO   String?  @default("") @db.VarChar(50)
+  N_VALOR      Decimal? @default(0)
 
-  @@id([ID_PRODUTO, ID_LOTE])
-  @@index([ID_PRODUTO])
-  @@index([ID_LOTE])
+  ST_LOTE    ST_LOTE    @relation(fields: [ID_LOTE], references: [ID_LOTE])
+  ID_LOTE    String
+  ST_PRODUTO ST_PRODUTO @relation(fields: [ID_PRODUTO], references: [ID_PRODUTO])
+  ID_PRODUTO String
+
+  @@map("st_produto_lote")
 }
 
-model st_lote {
-  ID_LOTE         Int               @id @unique() @default(autoincrement())
-  D_DATA_INICIO   DateTime?         @default(now()) @db.Timestamp(0)
-  ID_FORNECEDOR   Int?              @db.Int
-  ID_CLIENTE      Int?              @db.Int
-  S_ATIVO         String?           @default("S") @db.Char(1)
-  ST_CLIENTE      st_cliente?       @relation(fields: [ID_CLIENTE], references: [ID_CLIENTE], onUpdate: Cascade, onDelete: Cascade)
-  ST_FORNECEDOR   st_fornecedor?    @relation(fields: [ID_FORNECEDOR], references: [ID_FORNECEDOR], onUpdate: Cascade, onDelete: Cascade)
-  ST_PRODUTO_LOTE st_produto_lote[]
+model ST_LOTE {
+  ID_LOTE       String    @id @unique() @default(uuid())
+  D_DATA_INICIO DateTime? @default(now()) @db.Timestamp(0)
+  S_ATIVO       String    @default("S") @db.Char(1)
 
-  @@index([ID_CLIENTE])
-  @@index([ID_FORNECEDOR])
+  ST_CLIENTE      ST_CLIENTE?       @relation(fields: [ID_CLIENTE], references: [ID_CLIENTE])
+  ID_CLIENTE      String?
+  ST_FORNECEDOR   ST_FORNECEDOR?    @relation(fields: [ID_FORNECEDOR], references: [ID_FORNECEDOR])
+  ID_FORNECEDOR   String?
+  ST_PRODUTO_LOTE ST_PRODUTO_LOTE[]
+
+  @@map("st_lote")
 }
 
-model st_tipo {
-  ID_TIPO Int     @id @default(autoincrement())
-  S_NOME  String? @db.VarChar(45)
-  S_ATIVO String? @default("S") @db.VarChar(1)
+model ST_TIPO {
+  ID_TIPO    String       @id @default(uuid())
+  S_NOME     String?      @db.VarChar(45)
+  S_ATIVO    String?      @default("S") @db.VarChar(1)
+  ST_PRODUTO ST_PRODUTO[]
 
-  ST_PRODUTO st_produto[]
+  @@map("st_tipo")
 }
 
-model st_usuario {
-  ID_USUARIO         Int      @id @default(autoincrement())
+model ST_GRUPO {
+  ID_GRUPO   String       @id @default(uuid())
+  S_NOME     String       @db.VarChar(50)
+  N_NIVEL    Int?         @db.Int
+  S_ATIVO    String?      @default("S") @db.Char(1)
+  ST_USUARIO ST_USUARIO[]
+
+  @@map("st_grupo")
+}
+
+model ST_USUARIO {
+  ID_USUARIO         String   @id @default(uuid())
   S_NOME             String   @db.VarChar(150)
   S_EMAIL            String   @db.VarChar(200)
   S_SENHA            String   @db.VarChar(64)
-  ID_GRUPO           Int      @db.Int
   D_EXPIRACAO_SENHA  DateTime @db.Timestamp(0)
   N_TENTATIVAS_LOGIN Int?     @default(0) @db.Int
-  S_ATIVO            String?  @default("S") @db.VarChar(1)
   S_CHAVE            String?  @db.VarChar(30)
+  S_ATIVO            String?  @default("S") @db.VarChar(1)
 
-  ST_GRUPO st_grupo @relation(fields: [ID_GRUPO], references: [ID_GRUPO], onUpdate: Cascade, onDelete: Cascade)
+  st_grupo ST_GRUPO @relation(fields: [ID_GRUPO], references: [ID_GRUPO])
+  ID_GRUPO String
 
-  @@index([ID_GRUPO])
-}
-
-view vw_estoque {
-  ID_PRODUTO Int      @unique @default(0)
-  QUANTIDADE Decimal? @db.Decimal(41, 0)
-
-  ST_PRODUTO st_produto @relation(fields: [ID_PRODUTO], references: [ID_PRODUTO])
-
-  @@index([ID_PRODUTO])
-}
-
-view vw_menor_estoque {
-  ID_PRODUTO Int      @unique @default(0)
-  QUANTIDADE Decimal? @db.Decimal(41, 0)
-
-  ST_PRODUTO st_produto @relation(fields: [ID_PRODUTO], references: [ID_PRODUTO])
-
-  @@index([ID_PRODUTO])
+  @@map("st_usuario")
 }
