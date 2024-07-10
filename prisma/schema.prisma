@@ -10,32 +10,35 @@ datasource db {
 }
 
 model ST_CLIENTE {
-  ID_CLIENTE String    @id @default(uuid())
-  S_NOME     String?   @db.VarChar(45)
-  S_ATIVO    String?   @default("S") @db.Char(1)
-  ST_LOTE    ST_LOTE[]
+  ID_CLIENTE String  @id @default(uuid())
+  S_NOME     String? @db.VarChar(45)
+  S_ATIVO    String? @default("S") @db.Char(1)
 
   ST_EMPRESA ST_EMPRESA @relation(fields: [ID_EMPRESA], references: [ID_EMPRESA])
   ID_EMPRESA String
+
+  ST_LOTE ST_LOTE[]
 
   @@map("st_cliente")
 }
 
 model ST_EMPRESA {
-  ID_EMPRESA String       @id @default(uuid())
-  S_NOME     String       @db.VarChar(45)
-  D_DATA     DateTime     @default(now()) @db.Timestamp(0)
-  S_ATIVO    String?      @default("S") @db.Char(1)
+  ID_EMPRESA String   @id @default(uuid())
+  S_NOME     String   @db.VarChar(45)
+  D_DATA     DateTime @default(now()) @db.Timestamp(0)
+  S_ATIVO    String?  @default("S") @db.Char(1)
+
   ST_CLIENTE ST_CLIENTE[]
 
   @@map("st_empresa")
 }
 
 model ST_FORNECEDOR {
-  ID_FORNECEDOR String    @id @default(uuid())
-  S_NOME        String?   @db.VarChar(45)
-  S_ATIVO       String?   @default("S") @db.Char(1)
-  ST_LOTE       ST_LOTE[]
+  ID_FORNECEDOR String  @id @default(uuid())
+  S_NOME        String? @db.VarChar(45)
+  S_ATIVO       String? @default("S") @db.Char(1)
+
+  ST_LOTE ST_LOTE[]
 
   @@map("st_fornecedor")
 }
@@ -85,10 +88,11 @@ model ST_LOTE {
   D_DATA_INICIO DateTime? @default(now()) @db.Timestamp(0)
   S_ATIVO       String    @default("S") @db.Char(1)
 
-  ST_CLIENTE      ST_CLIENTE?       @relation(fields: [ID_CLIENTE], references: [ID_CLIENTE])
-  ID_CLIENTE      String?
-  ST_FORNECEDOR   ST_FORNECEDOR?    @relation(fields: [ID_FORNECEDOR], references: [ID_FORNECEDOR])
-  ID_FORNECEDOR   String?
+  ST_CLIENTE    ST_CLIENTE?    @relation(fields: [ID_CLIENTE], references: [ID_CLIENTE])
+  ID_CLIENTE    String?
+  ST_FORNECEDOR ST_FORNECEDOR? @relation(fields: [ID_FORNECEDOR], references: [ID_FORNECEDOR])
+  ID_FORNECEDOR String?
+
   ST_PRODUTO_LOTE ST_PRODUTO_LOTE[]
 
   @@map("st_lote")
