@@ -8,7 +8,7 @@ import { FornecedorService } from './fornecedor.service';
 export class FornecedorController {
   constructor(private readonly fornecedorService: FornecedorService) {}
 
-  @Get()
+  /* @Get()
   async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
       const consulta = await this.fornecedorService.findAll(req.query);
@@ -34,7 +34,11 @@ export class FornecedorController {
         .status(202)
         .send({ message: 'Fornecedor atualizado com sucesso!' });
     } catch (error) {
-      return res.status(409);
+      const _error = err as { message: string };
+
+      return res.status(409).send({
+        message: _error.message,
+      });
     }
   }
   @Post()
@@ -48,11 +52,11 @@ export class FornecedorController {
         .status(202)
         .send({ message: 'Fornecedor criado com sucesso!' });
     } catch (err) {
-      console.log('error!', err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: 'Erro de referência: Fornecedor não pôde ser criado.',
+        message: _error.message,
       });
     }
-  }
+  } */
 }

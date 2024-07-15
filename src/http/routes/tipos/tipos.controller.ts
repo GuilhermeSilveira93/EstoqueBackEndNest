@@ -10,7 +10,7 @@ import { TiposService } from './tipos.service';
 export class TiposController {
   constructor(private readonly tiposService: TiposService) {}
 
-  @Get()
+  /* @Get()
   async findWithParams(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
       const consulta = await this.tiposService.findWithParams(
@@ -19,10 +19,10 @@ export class TiposController {
 
       return res.status(200).send(consulta);
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
   }
@@ -33,10 +33,10 @@ export class TiposController {
 
       return res.status(200).send(consulta);
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
   }
@@ -52,10 +52,10 @@ export class TiposController {
 
       return res.status(202).send({ message: 'Tipo alterado com sucesso !' });
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
   }
@@ -66,11 +66,11 @@ export class TiposController {
 
       return res.status(202).send({ message: 'Tipo criado com sucesso!' });
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
-  }
+  } */
 }

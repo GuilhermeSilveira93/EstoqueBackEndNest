@@ -20,16 +20,16 @@ export class ClienteService {
     const calculoSkip = Number(LimitPerPage) * (Number(Page) - 1);
     const skip = calculoSkip < 0 ? 0 : calculoSkip;
 
-    const total = await this.prisma.st_cliente.count({
+    const total = await this.prisma.sT_CLIENTE.count({
       where: {
         S_ATIVO,
         S_NOME: { contains: Search },
-        ID_CLIENTE: ID_CLIENTE ? Number(ID_CLIENTE) : undefined,
-        ID_EMPRESA: ID_EMPRESA ? Number(ID_EMPRESA) : undefined,
+        ID_CLIENTE: ID_CLIENTE ?? undefined,
+        ID_EMPRESA: ID_EMPRESA ?? undefined,
       },
     });
 
-    const clientes = await this.prisma.st_cliente.findMany({
+    const clientes = await this.prisma.sT_CLIENTE.findMany({
       select: {
         ID_CLIENTE: true,
         S_NOME: true,
@@ -44,8 +44,8 @@ export class ClienteService {
       where: {
         S_ATIVO,
         S_NOME: { contains: Search },
-        ID_CLIENTE: ID_CLIENTE ? Number(ID_CLIENTE) : undefined,
-        ID_EMPRESA: ID_EMPRESA ? Number(ID_EMPRESA) : undefined,
+        ID_CLIENTE: ID_CLIENTE ?? undefined,
+        ID_EMPRESA: ID_EMPRESA ?? undefined,
         ST_EMPRESA: {
           S_ATIVO,
         },
@@ -72,11 +72,11 @@ export class ClienteService {
     ID_CLIENTE,
     data,
   }: {
-    ID_CLIENTE: number;
+    ID_CLIENTE: string;
     data: UpdateClienteDto;
   }) {
     try {
-      await this.prisma.st_cliente.update({
+      await this.prisma.sT_CLIENTE.update({
         data: {
           S_ATIVO: data.S_ATIVO ? 'S' : 'N',
           S_NOME: data.S_NOME,
@@ -91,7 +91,7 @@ export class ClienteService {
     const { ID_EMPRESA, S_NOME } = req;
 
     try {
-      await this.prisma.st_cliente.create({
+      await this.prisma.sT_CLIENTE.create({
         data: {
           S_NOME,
           ID_EMPRESA,

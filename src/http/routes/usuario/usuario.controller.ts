@@ -1,6 +1,7 @@
 import { Controller, Get, Patch, Post, Req, Res } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
+import { CreateUserDTO } from './dto/create-usuario.dto';
 import { FilterUserDto } from './dto/filter-usuario.dto';
 import { UpdateUserDTO } from './dto/update-usuario.dto';
 import { UsuarioService } from './usuario.service';
@@ -17,10 +18,10 @@ export class UsuarioController {
 
       return res.status(202).send(consulta);
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
   }
@@ -30,7 +31,7 @@ export class UsuarioController {
     const data = req.body as UpdateUserDTO;
     try {
       await this.usuarioService.updateUser({
-        ID_USUARIO: Number(params.ID_USUARIO),
+        ID_USUARIO: params.ID_USUARIO,
         data,
       });
 
@@ -38,25 +39,27 @@ export class UsuarioController {
         .status(202)
         .send({ message: 'Usuario alterado com sucesso !' });
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
   }
   @Post()
   async criarUsuario(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
-    const data = req.body as UpdateUserDTO;
+    const data = req.body as CreateUserDTO;
     try {
-      await this.usuarioService.createUser(data);
+      const response = await this.usuarioService.createUser(data);
 
-      return res.status(202).send({ message: 'Usuario criado com sucesso !' });
+      return res
+        .status(202)
+        .send({ message: 'Usuario criado com sucesso !', data: response });
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
   }

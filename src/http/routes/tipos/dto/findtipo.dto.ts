@@ -1,11 +1,7 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 //PRECISAMOS COLOCAR OS CAMPOS PARA FAZER O DTO - DATA TRANSFER OBJECT
 export class FindTipoDto {
-  @IsNumber()
-  @IsOptional()
-  ID_TIPO?: string;
-
   @IsString({ message: 'Filtro Ativo precisa ser String' })
   @IsOptional()
   S_ATIVO?: string;
@@ -14,11 +10,11 @@ export class FindTipoDto {
   @IsOptional()
   Search?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
   Page?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
   LimitPerPage?: string;
 }

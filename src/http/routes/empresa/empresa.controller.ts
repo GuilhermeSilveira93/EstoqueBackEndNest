@@ -19,7 +19,7 @@ export class EmpresaController {
       return res.status(204).send({ message: 'Algo deu errado!' });
     }
   }
-  @Get('all')
+  /* @Get('all')
   async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
       const consulta = await this.empresaService.findAll();
@@ -28,8 +28,8 @@ export class EmpresaController {
     } catch (error) {
       return res.status(204).send({ message: 'Algo deu errado!' });
     }
-  }
-  @Post()
+  } */
+  /* @Post()
   async createEmpresa(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const data = req.body as CreateEmpresaDto;
     try {
@@ -54,7 +54,11 @@ export class EmpresaController {
         .status(202)
         .send({ message: 'Empresa alterado com sucesso !' });
     } catch (error) {
-      return res.status(409).send({ message: 'Algo deu errado!' });
+      const _error = err as { message: string };
+
+      return res.status(409).send({
+        message: _error.message,
+      });
     }
-  }
+  } */
 }

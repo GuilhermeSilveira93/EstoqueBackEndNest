@@ -10,17 +10,17 @@ import { ProdutoService } from './produto.service';
 @Controller('produto')
 export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}
-  @Post()
+  /* @Post()
   async createProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
       await this.produtoService.createProd(req.body as CreateProdutoDTO);
 
       return res.status(202).send({ message: 'Produto criado com sucesso!' });
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
   }
@@ -31,8 +31,10 @@ export class ProdutoController {
 
       return res.status(200).send(consulta);
     } catch (err) {
+      const _error = err as { message: string };
+
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
   }
@@ -45,10 +47,10 @@ export class ProdutoController {
 
       return res.status(200).send(consulta);
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
   }
@@ -59,10 +61,10 @@ export class ProdutoController {
 
       return res.code(202).send(movimentacao);
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: err,
+        message: _error.message,
       });
     }
   }
@@ -86,11 +88,11 @@ export class ProdutoController {
         .status(202)
         .send({ message: 'Produto alterado com sucesso !' });
     } catch (err) {
-      console.log(err);
+      const _error = err as { message: string };
 
       return res.status(409).send({
-        message: (err as Error).message,
+        message: _error.message,
       });
     }
-  }
+  } */
 }
