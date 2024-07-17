@@ -15,7 +15,7 @@ export class GrupoService {
     const { S_NOME, N_NIVEL } = req;
 
     return await this.prisma.sT_GRUPO.create({
-      data: { S_NOME, N_NIVEL },
+      data: { S_NOME: S_NOME.toUpperCase(), N_NIVEL },
     });
   }
 }

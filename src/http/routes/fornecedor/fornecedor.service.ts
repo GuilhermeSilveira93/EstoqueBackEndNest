@@ -19,19 +19,19 @@ export class FornecedorService {
     const calculoSkip = Number(LimitPerPage) * (Number(Page) - 1);
     const skip = calculoSkip < 0 ? 0 : calculoSkip;
 
-    const total = await this.prisma.st_fornecedor.count({
+    const total = await this.prisma.sT_FORNECEDOR.count({
       where: {
         S_ATIVO,
         S_NOME: { contains: Search },
-        ID_FORNECEDOR: ID_FORNECEDOR ? Number(ID_FORNECEDOR) : undefined,
+        ID_FORNECEDOR: ID_FORNECEDOR ?? undefined,
       },
     });
 
-    const consulta = await this.prisma.st_fornecedor.findMany({
+    const consulta = await this.prisma.sT_FORNECEDOR.findMany({
       where: {
         S_ATIVO,
         S_NOME: { contains: Search },
-        ID_FORNECEDOR: ID_FORNECEDOR ? Number(ID_FORNECEDOR) : undefined,
+        ID_FORNECEDOR: ID_FORNECEDOR ?? undefined,
       },
       take: Number(LimitPerPage),
       skip,
@@ -44,10 +44,10 @@ export class FornecedorService {
     ID_FORNECEDOR,
     data,
   }: {
-    ID_FORNECEDOR: number;
+    ID_FORNECEDOR: string;
     data: UpdateFornecedorDto;
   }) {
-    return await this.prisma.st_fornecedor.update({
+    return await this.prisma.sT_FORNECEDOR.update({
       data: {
         ...data,
         S_ATIVO: data.S_ATIVO ? 'S' : 'N',
@@ -56,7 +56,7 @@ export class FornecedorService {
     });
   }
   async createFornecedor(data: CreateFornecedorDto) {
-    return await this.prisma.st_fornecedor.create({
+    return await this.prisma.sT_FORNECEDOR.create({
       data,
     });
   }

@@ -28,7 +28,6 @@ export class ClienteService {
         ID_EMPRESA: ID_EMPRESA ?? undefined,
       },
     });
-
     const clientes = await this.prisma.sT_CLIENTE.findMany({
       select: {
         ID_CLIENTE: true,
@@ -46,15 +45,12 @@ export class ClienteService {
         S_NOME: { contains: Search },
         ID_CLIENTE: ID_CLIENTE ?? undefined,
         ID_EMPRESA: ID_EMPRESA ?? undefined,
-        ST_EMPRESA: {
-          S_ATIVO,
-        },
       },
       take: Number(LimitPerPage),
       skip,
       orderBy: [{ ST_EMPRESA: { S_NOME: 'asc' } }, { S_NOME: 'asc' }],
     });
-
+    console.log(clientes)
     const consulta = clientes.map((cliente) => {
       return {
         ID_CLIENTE: cliente.ID_CLIENTE,

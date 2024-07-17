@@ -9,14 +9,14 @@ import { UpdateTipoDto } from './dto/updatetipo.dto';
 export class TiposService {
   constructor(private prisma: PrismaService) {}
   async findAll() {
-    const total = await this.prisma.st_tipo.count({
+    const total = await this.prisma.sT_TIPO.count({
       where: {
         S_ATIVO: 'S',
       },
       orderBy: { S_NOME: 'asc' },
     });
 
-    const consulta = await this.prisma.st_tipo.findMany({
+    const consulta = await this.prisma.sT_TIPO.findMany({
       where: {
         S_ATIVO: 'S',
       },
@@ -27,7 +27,6 @@ export class TiposService {
   }
   async findWithParams(req: FindTipoDto) {
     const {
-      ID_TIPO,
       Search,
       S_ATIVO = 'S',
       LimitPerPage = '10',
@@ -36,18 +35,16 @@ export class TiposService {
     const calculoSkip = Number(LimitPerPage) * (Number(Page) - 1);
     const skip = calculoSkip < 0 ? 0 : calculoSkip;
 
-    const total = await this.prisma.st_tipo.count({
+    const total = await this.prisma.sT_TIPO.count({
       where: {
-        ID_TIPO: ID_TIPO ? Number(ID_TIPO) : undefined,
         S_ATIVO,
         S_NOME: { contains: Search },
       },
       orderBy: { S_NOME: 'asc' },
     });
 
-    const consulta = await this.prisma.st_tipo.findMany({
+    const consulta = await this.prisma.sT_TIPO.findMany({
       where: {
-        ID_TIPO: ID_TIPO ? Number(ID_TIPO) : undefined,
         S_ATIVO,
         S_NOME: { contains: Search },
       },
@@ -63,11 +60,11 @@ export class TiposService {
     ID_TIPO,
   }: {
     data: UpdateTipoDto;
-    ID_TIPO: number;
+    ID_TIPO: string;
   }) {
     const { S_NOME, S_ATIVO } = data;
 
-    return this.prisma.st_tipo.update({
+    return this.prisma.sT_TIPO.update({
       data: {
         S_NOME,
         S_ATIVO: S_ATIVO ? 'S' : 'N',
@@ -80,7 +77,7 @@ export class TiposService {
   async createTipo(req: CreateTipoDto) {
     const { S_NOME } = req;
 
-    return await this.prisma.st_tipo
+    return await this.prisma.sT_TIPO
       .create({
         data: {
           S_NOME,

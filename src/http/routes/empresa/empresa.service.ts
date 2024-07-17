@@ -19,19 +19,19 @@ export class EmpresaService {
     const calculoSkip = Number(LimitPerPage) * (Number(Page) - 1);
     const skip = calculoSkip < 0 ? 0 : calculoSkip;
 
-    const total = await this.prisma.st_empresa.count({
+    const total = await this.prisma.sT_EMPRESA.count({
       where: {
         S_ATIVO,
         S_NOME: { contains: Search },
-        ID_EMPRESA: ID_EMPRESA ? Number(ID_EMPRESA) : undefined,
+        ID_EMPRESA: ID_EMPRESA ?? undefined,
       },
     });
 
-    const consulta = await this.prisma.st_empresa.findMany({
+    const consulta = await this.prisma.sT_EMPRESA.findMany({
       where: {
         S_ATIVO,
         S_NOME: { contains: Search },
-        ID_EMPRESA: ID_EMPRESA ? Number(ID_EMPRESA) : undefined,
+        ID_EMPRESA: ID_EMPRESA ?? undefined,
       },
       take: Number(LimitPerPage),
       skip,
@@ -41,13 +41,13 @@ export class EmpresaService {
     return { data: consulta, total };
   }
   async findAll() {
-    const total = await this.prisma.st_empresa.count({
+    const total = await this.prisma.sT_EMPRESA.count({
       where: {
         S_ATIVO: 'S',
       },
     });
 
-    const consulta = await this.prisma.st_empresa.findMany({
+    const consulta = await this.prisma.sT_EMPRESA.findMany({
       where: {
         S_ATIVO: 'S',
       },
@@ -57,7 +57,7 @@ export class EmpresaService {
     return { data: consulta, total };
   }
   async createEmpresa(req: CreateEmpresaDto) {
-    return await this.prisma.st_empresa.create({
+    return await this.prisma.sT_EMPRESA.create({
       data: req,
     });
   }
@@ -65,11 +65,11 @@ export class EmpresaService {
     ID_EMPRESA,
     data,
   }: {
-    ID_EMPRESA: number;
+    ID_EMPRESA: string;
     data: UpdateEmpresaDto;
   }) {
     try {
-      await this.prisma.st_empresa.update({
+      await this.prisma.sT_EMPRESA.update({
         data: {
           S_ATIVO: data.S_ATIVO ? 'S' : 'N',
           S_NOME: data.S_NOME,

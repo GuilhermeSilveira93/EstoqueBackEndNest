@@ -20,7 +20,7 @@ export class ClienteController {
     } catch (error) {
       return res.status(204).send({ message: 'Algo deu errado!' });
     }
-  } /*
+  }
   @Post()
   async createCliente(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const data = req.body as CreateClienteDto;
@@ -38,7 +38,7 @@ export class ClienteController {
     const data = req.body as UpdateClienteDto;
     try {
       await this.clienteService.attCliente({
-        ID_CLIENTE: Number(params.ID_CLIENTE),
+        ID_CLIENTE: params.ID_CLIENTE,
         data,
       });
 
@@ -46,11 +46,11 @@ export class ClienteController {
         .status(202)
         .send({ message: 'Cliente alterado com sucesso !' });
     } catch (error) {
-      const _error = err as { message: string };
+      const _error = error as { message: string };
 
       return res.status(409).send({
         message: _error.message,
       });
     }
-  } */
+  }
 }

@@ -12,7 +12,7 @@ export class ProdutoService {
   async createProd(req: CreateProdutoDTO) {
     const { S_NOME, ID_TIPO, N_SERIAL } = req;
 
-    return await this.prisma.st_produto
+    return await this.prisma.sT_PRODUTO
       .create({
         data: {
           S_NOME,
@@ -35,15 +35,15 @@ export class ProdutoService {
     const calculoSkip = Number(LimitPerPage) * (Number(Page) - 1);
     const skip = calculoSkip < 0 ? 0 : calculoSkip;
 
-    const total = await this.prisma.st_produto.count({
+    const total = await this.prisma.sT_PRODUTO.count({
       where: {
         S_ATIVO,
         S_NOME: { contains: Search },
-        ID_PRODUTO: ID_PRODUTO ? Number(ID_PRODUTO) : undefined,
+        ID_PRODUTO: ID_PRODUTO ?? undefined,
       },
     });
 
-    const produtos = await this.prisma.st_produto.findMany({
+    const produtos = await this.prisma.sT_PRODUTO.findMany({
       select: {
         ID_PRODUTO: true,
         S_NOME: true,
@@ -57,7 +57,7 @@ export class ProdutoService {
       where: {
         S_ATIVO,
         S_NOME: { contains: Search },
-        ID_PRODUTO: ID_PRODUTO ? Number(ID_PRODUTO) : undefined,
+        ID_PRODUTO: ID_PRODUTO ?? undefined,
       },
       take: Number(LimitPerPage),
       skip,
@@ -78,7 +78,7 @@ export class ProdutoService {
     } = req;
 
     try {
-      const total = await this.prisma.st_produto.count({
+      const total = await this.prisma.sT_PRODUTO.count({
         where: {
           S_ATIVO,
         },
@@ -105,16 +105,16 @@ export class ProdutoService {
     ID_PRODUTO,
   }: {
     data: UpdateStProdutoDto;
-    ID_PRODUTO: number;
+    ID_PRODUTO: string;
   }) {
     const { S_NOME, S_ATIVO, ID_TIPO, N_SERIAL } = data;
 
-    return this.prisma.st_produto.update({
+    return this.prisma.sT_PRODUTO.update({
       data: {
         S_NOME,
         N_SERIAL,
         S_ATIVO: S_ATIVO ? 'S' : 'N',
-        ID_TIPO: ID_TIPO ? Number(ID_TIPO) : undefined,
+        ID_TIPO: ID_TIPO ?? undefined,
       },
       where: {
         ID_PRODUTO,
@@ -122,7 +122,7 @@ export class ProdutoService {
     });
   }
   async movimentacao() {
-    const resposta = await this.prisma.st_lote.findMany({
+    const resposta = await this.prisma.sT_LOTE.findMany({
       select: {
         ID_LOTE: true,
         D_DATA_INICIO: true,

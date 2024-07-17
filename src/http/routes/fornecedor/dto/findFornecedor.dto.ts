@@ -2,7 +2,7 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 //PRECISAMOS COLOCAR OS CAMPOS PARA FAZER O DTO - DATA TRANSFER OBJECT
 export class FindFornecedorDto {
-  @IsNumber()
+  @IsString()
   @IsOptional()
   ID_FORNECEDOR?: string;
 

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `st_log_acesso` MODIFY `ID_USUARIO` VARCHAR(191) NOT NULL;

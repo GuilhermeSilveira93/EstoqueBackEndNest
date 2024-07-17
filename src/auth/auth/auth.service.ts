@@ -15,16 +15,16 @@ export class AuthService {
     S_EMAIL: string,
     S_SENHA: string,
   ): Promise<{
-    ID_USUARIO: number;
+    ID_USUARIO: string;
     code?: string;
     S_NOME: string;
-    ID_GRUPO: number;
-    ST_GRUPO: {
+    ID_GRUPO: string;
+    st_grupo: {
       N_NIVEL: number;
     };
   }> {
     try {
-      const chave = await this.prismaService.st_usuario.findFirstOrThrow({
+      const chave = await this.prismaService.sT_USUARIO.findFirstOrThrow({
         select: {
           S_CHAVE: true,
         },
@@ -34,12 +34,12 @@ export class AuthService {
       });
       const password = await bcrypt.hash(S_SENHA, chave.S_CHAVE);
 
-      return await this.prismaService.st_usuario.findFirstOrThrow({
+      return await this.prismaService.sT_USUARIO.findFirstOrThrow({
         select: {
           ID_USUARIO: true,
           S_NOME: true,
           ID_GRUPO: true,
-          ST_GRUPO: {
+          st_grupo: {
             select: {
               N_NIVEL: true,
             },
@@ -62,9 +62,9 @@ export class AuthService {
     D_DATA.setHours(D_DATA.getHours() - 3);
 
     if (user.code === 'P2025') {
-      await this.prismaService.st_log_acesso.create({
+      await this.prismaService.sT_LOG_ACESSO.create({
         data: {
-          ID_USUARIO: 0,
+          ID_USUARIO: '',
           S_EMAIL,
           D_DATA,
           S_PERMITIDO: 'N',
@@ -73,7 +73,7 @@ export class AuthService {
 
       return { message: `E-mail ou Senha não encontrado: ${S_EMAIL}` };
     }
-    await this.prismaService.st_log_acesso.create({
+    await this.prismaService.sT_LOG_ACESSO.create({
       data: {
         ID_USUARIO: user.ID_USUARIO,
         S_EMAIL,
@@ -86,7 +86,6 @@ export class AuthService {
       sub: user.ID_USUARIO,
       ...user,
     };
-
     return {
       token: this.jwtService.sign(payload),
       message: 'Login realizado com sucesso',

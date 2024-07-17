@@ -45,7 +45,7 @@ model ST_FORNECEDOR {
 
 model ST_LOG_ACESSO {
   ID_LOG_ACESSO String   @id @default(uuid())
-  ID_USUARIO    Int      @db.Int
+  ID_USUARIO    String
   S_EMAIL       String   @db.VarChar(150)
   S_PERMITIDO   String   @db.VarChar(1)
   D_DATA        DateTime @default(now()) @db.Timestamp(0)

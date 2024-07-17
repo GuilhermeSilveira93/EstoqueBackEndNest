@@ -16,7 +16,7 @@ export class CreateProdutoDTO {
   @MaxLength(45)
   N_SERIAL?: string;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty({ message: 'Tipo obrigatório' })
-  ID_TIPO: number;
+  ID_TIPO: string;
 }

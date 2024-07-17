@@ -8,7 +8,7 @@ import { FornecedorService } from './fornecedor.service';
 export class FornecedorController {
   constructor(private readonly fornecedorService: FornecedorService) {}
 
-  /* @Get()
+   @Get()
   async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
       const consulta = await this.fornecedorService.findAll(req.query);
@@ -26,7 +26,7 @@ export class FornecedorController {
     console.log(data);
     try {
       await this.fornecedorService.editFornecedor({
-        ID_FORNECEDOR: Number(params.ID_FORNECEDOR),
+        ID_FORNECEDOR: params.ID_FORNECEDOR,
         data,
       });
 
@@ -34,7 +34,7 @@ export class FornecedorController {
         .status(202)
         .send({ message: 'Fornecedor atualizado com sucesso!' });
     } catch (error) {
-      const _error = err as { message: string };
+      const _error = error as { message: string };
 
       return res.status(409).send({
         message: _error.message,
@@ -58,5 +58,5 @@ export class FornecedorController {
         message: _error.message,
       });
     }
-  } */
+  }
 }

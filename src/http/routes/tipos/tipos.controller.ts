@@ -10,7 +10,7 @@ import { TiposService } from './tipos.service';
 export class TiposController {
   constructor(private readonly tiposService: TiposService) {}
 
-  /* @Get()
+  @Get()
   async findWithParams(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
       const consulta = await this.tiposService.findWithParams(
@@ -46,7 +46,7 @@ export class TiposController {
     const data = req.body as UpdateTipoDto;
     try {
       await this.tiposService.updateTipo({
-        ID_TIPO: Number(params.ID_TIPO),
+        ID_TIPO: params.ID_TIPO,
         data,
       });
 
@@ -72,5 +72,5 @@ export class TiposController {
         message: _error.message,
       });
     }
-  } */
+  }
 }

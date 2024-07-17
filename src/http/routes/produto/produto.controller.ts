@@ -10,7 +10,7 @@ import { ProdutoService } from './produto.service';
 @Controller('produto')
 export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}
-  /* @Post()
+   @Post()
   async createProd(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
       await this.produtoService.createProd(req.body as CreateProdutoDTO);
@@ -81,7 +81,7 @@ export class ProdutoController {
     try {
       await this.produtoService.atualizarProd({
         data,
-        ID_PRODUTO: Number(params.ID_PRODUTO),
+        ID_PRODUTO: params.ID_PRODUTO,
       });
 
       return res
@@ -94,5 +94,5 @@ export class ProdutoController {
         message: _error.message,
       });
     }
-  } */
+  }
 }
