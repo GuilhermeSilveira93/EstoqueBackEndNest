@@ -12,6 +12,7 @@ import { ProdutoModule } from './http/routes/produto/produto.module';
 import { TiposModule } from './http/routes/tipos/tipos.module';
 import { UsuarioModule } from './http/routes/usuario/usuario.module';
 import { ClienteModule } from './http/routes/cliente/cliente.module';
+import { LoteModule } from './http/routes/lote/lote.module';
 @Module({
   imports: [
     EnvModule,
@@ -28,6 +29,7 @@ import { ClienteModule } from './http/routes/cliente/cliente.module';
     EmpresaModule,
     FornecedorModule,
     ClienteModule,
+    LoteModule,
   ],
   controllers: [],
   providers: [],
