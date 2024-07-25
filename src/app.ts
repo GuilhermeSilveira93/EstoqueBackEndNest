@@ -1,4 +1,4 @@
-import cookie from '@fastify/cookie';
+import fastifyCookie from '@fastify/cookie';
 import helmet from '@fastify/helmet';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -16,7 +16,8 @@ export const Server = async () => {
     new FastifyAdapter(),
   );
   const envService = app.get(EnvService);
-  await app.register(cookie, {
+  
+  await app.register(fastifyCookie, {
     secret: envService.get('JWT_TOKEN'),
   });
   await app.register(helmet);
