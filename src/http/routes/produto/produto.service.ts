@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateProdutoDTO } from './dto/create-st_produto.dto';
 import { FindProdutoDto } from './dto/findproduto.dto';
 import { UpdateStProdutoDto } from './dto/update-st_produto.dto';
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class ProdutoService {
@@ -21,7 +22,16 @@ export class ProdutoService {
         },
       })
       .catch((err) => {
-        throw new Error(JSON.stringify(err));
+        const error = err as PrismaClientKnownRequestError
+        if (error.code === 'P2002') {
+          switch (error.meta.target) {
+            case 'st_produto_S_NOME_key':
+              throw new Error('Produto com este nome já existe');
+            default:
+              throw new Error(JSON.stringify(err))
+          }
+        }
+        throw new Error(JSON.stringify(err))
       });
   }
   async produtos(req: FindProdutoDto) {

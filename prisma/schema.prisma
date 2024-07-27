@@ -132,3 +132,8 @@ model ST_USUARIO {
 
   @@map("st_usuario")
 }
+
+view vw_estoque {
+  ID_PRODUTO String @id @default(uuid())
+  qtd        Int    @default(0) @db.Int
+}
