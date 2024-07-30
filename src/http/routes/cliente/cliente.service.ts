@@ -64,6 +64,26 @@ export class ClienteService {
 
     return { total, data: consulta };
   }
+  async findForCompany(ID_EMPRESA: string) {
+    const total = await this.prisma.sT_CLIENTE.count({
+      where: {
+        ID_EMPRESA: ID_EMPRESA ?? undefined,
+      },
+    });
+    const clientes = await this.prisma.sT_CLIENTE.findMany({
+      select: {
+        ID_CLIENTE: true,
+        S_NOME: true,
+      },
+      where: {
+        ID_EMPRESA: ID_EMPRESA ?? undefined,
+        S_ATIVO: 'S',
+      },
+      orderBy: [{ ST_EMPRESA: { S_NOME: 'asc' } }, { S_NOME: 'asc' }],
+    });
+
+    return { total, data: clientes };
+  }
   async attCliente({
     ID_CLIENTE,
     data,

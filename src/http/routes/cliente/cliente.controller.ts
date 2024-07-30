@@ -21,6 +21,17 @@ export class ClienteController {
       return res.status(204).send({ message: 'Algo deu errado!' });
     }
   }
+  @Get(':ID_EMPRESA')
+  async findForCompany(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    const params = req.params as { ID_EMPRESA: string };
+    try {
+      const consulta = await this.clienteService.findForCompany(params.ID_EMPRESA);
+      console.log(consulta)
+      return res.status(202).send(consulta);
+    } catch (error) {
+      return res.status(204).send({ message: 'Algo deu errado!' });
+    }
+  }
   @Post()
   async createCliente(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const data = req.body as CreateClienteDto;

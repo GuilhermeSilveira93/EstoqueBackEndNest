@@ -9,14 +9,32 @@ export class LoteController {
   constructor(private readonly loteService: LoteService) {}
 
   @Post(':ID_FORNECEDOR')
-  async create(
+  async createEntrada(
     @Body() createLoteDto: CreateLoteDto,
     @Req() req: FastifyRequest,
     @Res() res: FastifyReply,
   ) {
     const { ID_FORNECEDOR } = req.params as { ID_FORNECEDOR?: string };
     try {
-      await this.loteService.create({ data: createLoteDto, ID_FORNECEDOR });
+      await this.loteService.createEntrada({ data: createLoteDto, ID_FORNECEDOR });
+      res.send({ message: 'Lote inserido com sucesso!' });
+    } catch (err) {
+      const _error = err as { message: string };
+
+      return res.status(409).send({
+        message: _error.message,
+      });
+    }
+  }
+  @Post('/saida/:ID_CLIENTE')
+  async createSaida(
+    @Body() createLoteDto: CreateLoteDto,
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply,
+  ) {
+    const { ID_CLIENTE } = req.params as { ID_CLIENTE: string };
+    try {
+      await this.loteService.createSaida({ data: createLoteDto, ID_CLIENTE });
       res.send({ message: 'Lote inserido com sucesso!' });
     } catch (err) {
       const _error = err as { message: string };
