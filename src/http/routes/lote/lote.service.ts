@@ -50,7 +50,15 @@ export class LoteService {
             ID_CLIENTE,
           },
         });
-
+      const produtosDeEntrada = await this.prisma.vw_estoque.findMany({where: {ID_PRODUTO: {in: DADOS.map( dado => dado.ID_PRODUTO)}}})
+      const algumNegativo = produtosDeEntrada.find(produto => {
+        const dadoCorrespondente = DADOS.find(dado => dado.ID_PRODUTO === produto.ID_PRODUTO);
+        return dadoCorrespondente.N_QUANTIDADE > produto.qtd;
+      });
+      if(algumNegativo){
+        const produto = await prisma.sT_PRODUTO.findUnique({select: {S_NOME:true},where: {ID_PRODUTO: algumNegativo.ID_PRODUTO}})
+        throw new Error(`${produto.S_NOME} com quantidade insuficiente, ${algumNegativo.qtd} em estoque.`)
+      }
         return await prisma.sT_PRODUTO_LOTE.createMany({
           data: DADOS.map((dado) => ({
             ID_LOTE: lote.ID_LOTE,
@@ -62,6 +70,9 @@ export class LoteService {
           })),
         });
       });
-    } catch (error) {}
+    } catch (error) {
+      const _error = error as { message: string };
+      throw new Error(_error.message)
+    }
   }
 }
