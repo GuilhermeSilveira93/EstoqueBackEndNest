@@ -9,7 +9,6 @@ test('Usuario carrega tabela de produtos', async () => {
 
   // Converte a resposta em JSON
   const data = await response.json();
-  console.log(data);
 
   // Verifica se a resposta possui um array de produtos
   expect(Array.isArray(data)).toBeTruthy();
