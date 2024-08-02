@@ -15,3 +15,6 @@ services:
     volumes:
       - ./dataEstoque/data:/var/lib/mysql
     restart: always
+networks:
+  my-network:
+    driver: bridge
