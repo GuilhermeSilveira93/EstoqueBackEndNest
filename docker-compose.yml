@@ -5,7 +5,7 @@ services:
     image: mysql
     ports:
       - "3306:3306"
-    container_name: mysqlDatabase
+    container_name: database
     
     environment:
       MYSQL_DATABASE: estoquedocker

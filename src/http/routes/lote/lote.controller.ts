@@ -1,8 +1,10 @@
-import { Controller, Post, Body, Req, Res } from '@nestjs/common';
+import { Controller, Post, Body, Req, Res, Get } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { CreateLoteDto } from './dto/create-lote.dto';
 import { LoteService } from './lote.service';
+import { RelatorioEntradaDto } from './dto/relatorio-entrada.dto';
+import { RelatorioSaidaDto } from './dto/relatorio-saida.dto';
 
 @Controller('lote')
 export class LoteController {
@@ -36,6 +38,34 @@ export class LoteController {
     try {
       await this.loteService.createSaida({ data: createLoteDto, ID_CLIENTE });
       res.send({ message: 'Saida de Produtos realizada com sucesso!' });
+    } catch (err) {
+      const _error = err as { message: string };
+
+      return res.status(409).send({
+        message: _error.message,
+      });
+    }
+  }
+  @Post('/relatorio/entrada')
+  async relatorioEntrada(@Req() req: FastifyRequest,@Res() res: FastifyReply) {
+    const data = req.body as RelatorioEntradaDto
+    try {
+      const consulta = await this.loteService.relatorioEntrada( {data} );
+      res.status(200).send(consulta);
+    } catch (err) {
+      const _error = err as { message: string };
+
+      return res.status(409).send({
+        message: _error.message,
+      });
+    }
+  }
+  @Post('/relatorio/saida')
+  async relatorioSaida(@Req() req: FastifyRequest,@Res() res: FastifyReply) {
+    const data = req.body as RelatorioSaidaDto
+    try {
+      const consulta = await this.loteService.relatorioSaida( {data} );
+      res.status(200).send(consulta);
     } catch (err) {
       const _error = err as { message: string };
 
