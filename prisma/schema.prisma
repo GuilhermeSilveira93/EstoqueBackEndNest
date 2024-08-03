@@ -10,10 +10,9 @@ datasource db {
 }
 
 model ST_CLIENTE {
-  ID_CLIENTE     String @id @default(uuid())
-  ID_CLIENTE_OLD Int
-  S_NOME         String @unique() @db.VarChar(45)
-  S_ATIVO        String @default("S") @db.Char(1)
+  ID_CLIENTE String @id @default(uuid())
+  S_NOME     String @db.VarChar(45)
+  S_ATIVO    String @default("S") @db.Char(1)
 
   ST_EMPRESA ST_EMPRESA @relation(fields: [ID_EMPRESA], references: [ID_EMPRESA])
   ID_EMPRESA String
@@ -24,11 +23,10 @@ model ST_CLIENTE {
 }
 
 model ST_EMPRESA {
-  ID_EMPRESA     String   @id @default(uuid())
-  ID_EMPRESA_OLD Int
-  S_NOME         String   @unique() @db.VarChar(45)
-  D_DATA         DateTime @default(now()) @db.Timestamp(0)
-  S_ATIVO        String   @default("S") @db.Char(1)
+  ID_EMPRESA String   @id @default(uuid())
+  S_NOME     String   @unique() @db.VarChar(45)
+  D_DATA     DateTime @default(now()) @db.Timestamp(0)
+  S_ATIVO    String   @default("S") @db.Char(1)
 
   ST_CLIENTE ST_CLIENTE[]
 
@@ -36,10 +34,9 @@ model ST_EMPRESA {
 }
 
 model ST_FORNECEDOR {
-  ID_FORNECEDOR     String @id @default(uuid())
-  ID_FORNECEDOR_OLD Int
-  S_NOME            String @unique() @db.VarChar(45)
-  S_ATIVO           String @default("S") @db.Char(1)
+  ID_FORNECEDOR String @id @default(uuid())
+  S_NOME        String @unique() @db.VarChar(45)
+  S_ATIVO       String @default("S") @db.Char(1)
 
   ST_LOTE ST_LOTE[]
 
@@ -47,22 +44,20 @@ model ST_FORNECEDOR {
 }
 
 model ST_LOG_ACESSO {
-  ID_LOG_ACESSO     String   @id @default(uuid())
-  ID_LOG_ACESSO_OLD Int
-  ID_USUARIO        String
-  S_EMAIL           String   @db.VarChar(150)
-  S_PERMITIDO       String   @db.VarChar(1)
-  D_DATA            DateTime @default(now()) @db.Timestamp(0)
+  ID_LOG_ACESSO String   @id @default(uuid())
+  ID_USUARIO    String
+  S_EMAIL       String   @db.VarChar(150)
+  S_PERMITIDO   String   @db.VarChar(1)
+  D_DATA        DateTime @default(now()) @db.Timestamp(0)
 
   @@map("st_log_acesso")
 }
 
 model ST_PRODUTO {
-  ID_PRODUTO     String  @id @default(uuid())
-  ID_PRODUTO_OLD Int
-  S_NOME         String  @unique() @db.VarChar(150)
-  S_ATIVO        String  @default("S") @db.Char(1)
-  N_SERIAL       String? @db.VarChar(45)
+  ID_PRODUTO String  @id @default(uuid())
+  S_NOME     String  @unique() @db.VarChar(150)
+  S_ATIVO    String  @default("S") @db.Char(1)
+  N_SERIAL   String? @db.VarChar(45)
 
   ST_TIPO ST_TIPO @relation(fields: [ID_TIPO], references: [ID_TIPO])
   ID_TIPO String
@@ -73,12 +68,11 @@ model ST_PRODUTO {
 }
 
 model ST_PRODUTO_LOTE {
-  ID_PRODUTO_LOTE     String   @id @default(uuid())
-  ID_PRODUTO_LOTE_OLD Int
-  N_QUANTIDADE        Int      @db.Int
-  S_DETALHES          String?  @default("") @db.VarChar(100)
-  S_DIMENSAO          String?  @default("") @db.VarChar(50)
-  N_VALOR             Decimal? @default(0)
+  ID_PRODUTO_LOTE String   @id @default(uuid())
+  N_QUANTIDADE    Int      @db.Int
+  S_DETALHES      String?  @default("") @db.VarChar(100)
+  S_DIMENSAO      String?  @default("") @db.VarChar(50)
+  N_VALOR         Decimal? @default(0)
 
   ST_LOTE    ST_LOTE    @relation(fields: [ID_LOTE], references: [ID_LOTE])
   ID_LOTE    String
@@ -90,7 +84,6 @@ model ST_PRODUTO_LOTE {
 
 model ST_LOTE {
   ID_LOTE       String   @id @unique() @default(uuid())
-  ID_LOTE_OLD   Int
   D_DATA_INICIO DateTime @default(now()) @db.Timestamp(0)
   S_ATIVO       String   @default("S") @db.Char(1)
 
@@ -105,29 +98,26 @@ model ST_LOTE {
 }
 
 model ST_TIPO {
-  ID_TIPO     String       @id @default(uuid())
-  ID_TIPO_OLD Int
-  S_NOME      String       @unique() @db.VarChar(45)
-  S_ATIVO     String       @default("S") @db.VarChar(1)
-  ST_PRODUTO  ST_PRODUTO[]
+  ID_TIPO    String       @id @default(uuid())
+  S_NOME     String       @unique() @db.VarChar(45)
+  S_ATIVO    String       @default("S") @db.VarChar(1)
+  ST_PRODUTO ST_PRODUTO[]
 
   @@map("st_tipo")
 }
 
 model ST_GRUPO {
-  ID_GRUPO     String       @id @default(uuid())
-  ID_GRUPO_OLD Int
-  S_NOME       String       @unique() @db.VarChar(50)
-  N_NIVEL      Int          @db.Int
-  S_ATIVO      String       @default("S") @db.Char(1)
-  ST_USUARIO   ST_USUARIO[]
+  ID_GRUPO   String       @id @default(uuid())
+  S_NOME     String       @unique() @db.VarChar(50)
+  N_NIVEL    Int          @db.Int
+  S_ATIVO    String       @default("S") @db.Char(1)
+  ST_USUARIO ST_USUARIO[]
 
   @@map("st_grupo")
 }
 
 model ST_USUARIO {
   ID_USUARIO         String   @id @default(uuid())
-  ID_USUARIO_OLD     Int
   S_NOME             String   @db.VarChar(150)
   S_EMAIL            String   @unique() @db.VarChar(200)
   S_SENHA            String   @db.VarChar(64)
