@@ -26,7 +26,6 @@ export class ClienteController {
     const params = req.params as { ID_EMPRESA: string };
     try {
       const consulta = await this.clienteService.findForCompany(params.ID_EMPRESA);
-      console.log(consulta)
       return res.status(202).send(consulta);
     } catch (error) {
       return res.status(204).send({ message: 'Algo deu errado!' });

@@ -50,7 +50,6 @@ export class ClienteService {
       skip,
       orderBy: [{ ST_EMPRESA: { S_NOME: 'asc' } }, { S_NOME: 'asc' }],
     });
-    console.log(clientes)
     const consulta = clientes.map((cliente) => {
       return {
         ID_CLIENTE: cliente.ID_CLIENTE,

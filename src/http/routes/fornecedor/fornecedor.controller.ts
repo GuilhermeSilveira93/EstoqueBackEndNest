@@ -22,8 +22,6 @@ export class FornecedorController {
   async editFornecedor(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const params = req.params as { ID_FORNECEDOR: string };
     const data = req.body as UpdateFornecedorDto;
-    console.log('data');
-    console.log(data);
     try {
       await this.fornecedorService.editFornecedor({
         ID_FORNECEDOR: params.ID_FORNECEDOR,
