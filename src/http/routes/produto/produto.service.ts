@@ -34,7 +34,7 @@ export class ProdutoService {
         throw new Error(JSON.stringify(err))
       });
   }
-  async produtos(req: FindProdutoDto) {
+  async getAllWhithParams(req: FindProdutoDto) {
     const {
       ID_PRODUTO,
       Search,
@@ -71,6 +71,32 @@ export class ProdutoService {
       },
       take: Number(LimitPerPage),
       skip,
+      orderBy: { S_NOME: 'asc' },
+    });
+
+    return { data: produtos, total };
+  }
+  async getAll() {
+    const total = await this.prisma.sT_PRODUTO.count({
+      where: {
+        S_ATIVO: 'S',
+      },
+    });
+
+    const produtos = await this.prisma.sT_PRODUTO.findMany({
+      select: {
+        ID_PRODUTO: true,
+        S_NOME: true,
+        ID_TIPO: true,
+        N_SERIAL: true,
+        S_ATIVO: true,
+        ST_TIPO: {
+          select: { S_NOME: true },
+        },
+      },
+      where: {
+        S_ATIVO: 'S',
+      },
       orderBy: { S_NOME: 'asc' },
     });
 
