@@ -10,23 +10,31 @@ export class EmpresaController {
   constructor(private readonly empresaService: EmpresaService) {}
 
   @Get()
-  async findWithParams(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+  async getAllWithParams(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const consulta = await this.empresaService.findWithParams(req.query);
+      const consulta = await this.empresaService.getAllWithParams(req.query);
 
       return res.status(202).send(consulta);
     } catch (error) {
-      return res.status(204).send({ message: 'Algo deu errado!' });
+      const _error = error as { message: string };
+
+      return res.status(409).send({
+        message: _error.message,
+      });
     }
   }
-   @Get('all')
-  async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+   @Get('getAll')
+  async getAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const consulta = await this.empresaService.findAll();
+      const consulta = await this.empresaService.getAll();
 
       return res.status(202).send(consulta);
     } catch (error) {
-      return res.status(204).send({ message: 'Algo deu errado!' });
+      const _error = error as { message: string };
+
+      return res.status(409).send({
+        message: _error.message,
+      });
     }
   }
    @Post()
@@ -37,7 +45,11 @@ export class EmpresaController {
 
       return res.status(202).send({ message: 'Empresa criada com sucesso !' });
     } catch (error) {
-      return res.status(204).send({ message: 'Algo deu errado!' });
+      const _error = error as { message: string };
+
+      return res.status(409).send({
+        message: _error.message,
+      });
     }
   }
   @Patch(':ID_EMPRESA')

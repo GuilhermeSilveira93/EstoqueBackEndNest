@@ -8,7 +8,7 @@ import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 @Injectable()
 export class EmpresaService {
   constructor(private prisma: PrismaService) {}
-  async findWithParams(req: FindEmpresaDto) {
+  async getAllWithParams(req: FindEmpresaDto) {
     const {
       ID_EMPRESA,
       Search,
@@ -40,7 +40,7 @@ export class EmpresaService {
 
     return { data: consulta, total };
   }
-  async findAll() {
+  async getAll() {
     const total = await this.prisma.sT_EMPRESA.count({
       where: {
         S_ATIVO: 'S',

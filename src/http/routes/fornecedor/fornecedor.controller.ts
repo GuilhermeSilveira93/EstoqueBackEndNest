@@ -9,9 +9,19 @@ export class FornecedorController {
   constructor(private readonly fornecedorService: FornecedorService) {}
 
    @Get()
-  async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+  async getAllWithParams(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const consulta = await this.fornecedorService.findAll(req.query);
+      const consulta = await this.fornecedorService.getAllWithParams(req.query);
+
+      return res.status(202).send(consulta);
+    } catch (error) {
+      return res.status(404);
+    }
+  }
+  @Get('getAll')
+  async getAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      const consulta = await this.fornecedorService.getAll();
 
       return res.status(202).send(consulta);
     } catch (error) {

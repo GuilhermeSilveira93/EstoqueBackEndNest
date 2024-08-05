@@ -8,7 +8,7 @@ import { UpdateFornecedorDto } from './dto/update-fornecedor.dto';
 @Injectable()
 export class FornecedorService {
   constructor(private prisma: PrismaService) {}
-  async findAll(req: FindFornecedorDto) {
+  async getAllWithParams(req: FindFornecedorDto) {
     const {
       ID_FORNECEDOR,
       Search,
@@ -38,6 +38,22 @@ export class FornecedorService {
       orderBy: { S_NOME: 'asc' },
     });
 
+    return { data: consulta, total };
+  }
+  async getAll() {
+    const S_ATIVO = 'S'
+    const total = await this.prisma.sT_FORNECEDOR.count({
+      where: {
+        S_ATIVO,
+      },
+    });
+
+    const consulta = await this.prisma.sT_FORNECEDOR.findMany({
+      where: {
+        S_ATIVO,
+      },
+      orderBy: { S_NOME: 'asc' },
+    });
     return { data: consulta, total };
   }
   async editFornecedor({

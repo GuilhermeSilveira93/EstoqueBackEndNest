@@ -8,7 +8,7 @@ import { UpdateClienteDto } from './dto/update-cliente.dto';
 @Injectable()
 export class ClienteService {
   constructor(readonly prisma: PrismaService) {}
-  async findAll(req: FindClienteDto) {
+  async getAllWithParams(req: FindClienteDto) {
     const {
       ID_CLIENTE,
       ID_EMPRESA,
@@ -48,6 +48,43 @@ export class ClienteService {
       },
       take: Number(LimitPerPage),
       skip,
+      orderBy: [{ ST_EMPRESA: { S_NOME: 'asc' } }, { S_NOME: 'asc' }],
+    });
+    const consulta = clientes.map((cliente) => {
+      return {
+        ID_CLIENTE: cliente.ID_CLIENTE,
+        data: {
+          S_NOME: cliente.S_NOME,
+          S_ATIVO: cliente.S_ATIVO,
+          S_EMPRESA: cliente.ST_EMPRESA.S_NOME,
+        },
+      };
+    });
+
+    return { total, data: consulta };
+  }
+  async getAll(req: FindClienteDto) {
+    const S_ATIVO = 'S'
+    const total = await this.prisma.sT_CLIENTE.count({
+      where: {
+        S_ATIVO,
+      },
+    });
+    const clientes = await this.prisma.sT_CLIENTE.findMany({
+      select: {
+        ID_CLIENTE: true,
+        S_NOME: true,
+        S_ATIVO: true,
+        ID_EMPRESA: true,
+        ST_EMPRESA: {
+          select: {
+            S_NOME: true,
+          },
+        },
+      },
+      where: {
+        S_ATIVO,
+      },
       orderBy: [{ ST_EMPRESA: { S_NOME: 'asc' } }, { S_NOME: 'asc' }],
     });
     const consulta = clientes.map((cliente) => {

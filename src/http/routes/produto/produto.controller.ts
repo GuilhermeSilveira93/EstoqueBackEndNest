@@ -25,9 +25,23 @@ export class ProdutoController {
     }
   }
   @Get()
-  async produtos(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+  async getAllWithParams(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const consulta = await this.produtoService.produtos(req.query);
+      const consulta = await this.produtoService.getAllWithParams(req.query);
+
+      return res.status(200).send(consulta);
+    } catch (err) {
+      const _error = err as { message: string };
+
+      return res.status(409).send({
+        message: _error.message,
+      });
+    }
+  }
+  @Get('getAll')
+  async getAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      const consulta = await this.produtoService.getAllWithParams(req.query);
 
       return res.status(200).send(consulta);
     } catch (err) {
