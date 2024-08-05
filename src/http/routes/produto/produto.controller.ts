@@ -38,7 +38,7 @@ export class ProdutoController {
       });
     }
   }
-  @Get('/getall')
+  @Get('/getAll')
   async getAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
       const consulta = await this.produtoService.getAll();
