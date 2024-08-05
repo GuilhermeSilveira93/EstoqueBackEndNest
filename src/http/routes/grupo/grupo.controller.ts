@@ -9,11 +9,11 @@ export class GrupoController {
   constructor(private readonly grupoService: GrupoService) {}
 
   @Get()
-  async findAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+  async getAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const grupos = await this.grupoService.findAll();
+      const consulta = await this.grupoService.getAll();
 
-      return res.status(202).send({ data: grupos });
+      return res.status(202).send(consulta);
     } catch (error) {
       return res.status(404).send();
     }

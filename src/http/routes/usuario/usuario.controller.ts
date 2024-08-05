@@ -10,11 +10,25 @@ import { UsuarioService } from './usuario.service';
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
   @Get()
-  async getAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+  async getAllWithParams(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     try {
-      const consulta = await this.usuarioService.getAll(
+      const consulta = await this.usuarioService.getAllWithParams(
         req.query as FilterUserDto,
       );
+
+      return res.status(202).send(consulta);
+    } catch (err) {
+      const _error = err as { message: string };
+
+      return res.status(409).send({
+        message: _error.message,
+      });
+    }
+  }
+  @Get('getAll')
+  async getAll(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    try {
+      const consulta = await this.usuarioService.getAll();
 
       return res.status(202).send(consulta);
     } catch (err) {

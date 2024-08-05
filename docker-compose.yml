@@ -5,7 +5,7 @@ services:
     image: mysql
     ports:
       - "3306:3306"
-    container_name: database
+    container_name: EstoqueDataBase
     
     environment:
       MYSQL_DATABASE: estoquedocker
@@ -15,11 +15,8 @@ services:
     volumes:
       - ./dataEstoque/data:/var/lib/mysql
     restart: always
-<<<<<<< HEAD
     networks:
       - my-network
-=======
->>>>>>> origin/main
 networks:
   my-network:
     driver: bridge

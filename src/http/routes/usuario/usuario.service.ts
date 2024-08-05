@@ -10,7 +10,7 @@ import { UpdateUserDTO } from './dto/update-usuario.dto';
 export class UsuarioService {
   // eslint-disable-next-line no-unused-vars
   constructor(private prisma: PrismaService) {}
-  async getAll(req: FilterUserDto) {
+  async getAllWithParams(req: FilterUserDto) {
     const { Search, S_ATIVO = 'S', LimitPerPage = '10', Page = '0' } = req;
     const calculoSkip = Number(LimitPerPage) * (Number(Page) - 1);
     const skip = calculoSkip < 0 ? 0 : calculoSkip;
@@ -43,6 +43,39 @@ export class UsuarioService {
       where: {
         S_ATIVO,
         S_NOME: { contains: Search },
+      },
+      orderBy: { S_NOME: 'asc' },
+    });
+
+    return { data: users, total };
+  }
+  async getAll() {
+    const S_ATIVO = 'S'
+
+    const users = await this.prisma.sT_USUARIO.findMany({
+      select: {
+        ID_USUARIO: true,
+        S_NOME: true,
+        S_EMAIL: true,
+        ID_GRUPO: true,
+        D_EXPIRACAO_SENHA: true,
+        S_ATIVO: true,
+        N_TENTATIVAS_LOGIN: true,
+        st_grupo: {
+          select: {
+            N_NIVEL: true,
+          },
+        },
+      },
+      where: {
+        S_ATIVO: undefined,
+      },
+      orderBy: { S_NOME: 'asc' },
+    });
+
+    const total = await this.prisma.sT_USUARIO.count({
+      where: {
+        S_ATIVO,
       },
       orderBy: { S_NOME: 'asc' },
     });
