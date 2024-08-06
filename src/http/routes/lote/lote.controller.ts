@@ -51,6 +51,7 @@ export class LoteController {
     const data = req.body as RelatorioEntradaDto
     try {
       const consulta = await this.loteService.relatorioEntrada( {data} );
+      console.log(consulta)
       res.status(200).send(consulta);
     } catch (err) {
       const _error = err as { message: string };

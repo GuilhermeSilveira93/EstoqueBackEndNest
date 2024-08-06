@@ -89,7 +89,7 @@ export class LoteService {
   async relatorioEntrada({ data }: { data: RelatorioEntradaDto }) {
     const { D_DATA, ID_FORNECEDOR, ID_PRODUTO } = data;
     try {
-      return await this.prisma.sT_PRODUTO_LOTE
+      const consulta = await this.prisma.sT_PRODUTO_LOTE
         .findMany({
           select: {
             N_QUANTIDADE: true,
@@ -105,7 +105,7 @@ export class LoteService {
             ST_LOTE: {
               ST_FORNECEDOR: { ID_FORNECEDOR },
               ST_CLIENTE: { is: null },
-              D_DATA_INICIO: { gte: D_DATA.D_INICIO, lte: D_DATA.D_FIM },
+              D_DATA_INICIO: { gte: D_DATA.D_INICIO, lte: D_DATA.D_FIM},
             },
             ST_PRODUTO: { ID_PRODUTO: ID_PRODUTO },
           },
@@ -121,6 +121,10 @@ export class LoteService {
             };
           });
         });
+        if (consulta.length > 0) {
+          return consulta
+        }
+        throw new Error('Não foi encontrado movimentação para o filtro selecionado.')
     } catch (error) {
       const _error = error as { message: string };
       throw new Error(_error.message);
@@ -129,7 +133,7 @@ export class LoteService {
   async relatorioSaida({ data }: { data: RelatorioSaidaDto }) {
     const { D_DATA, ID_EMPRESA, ID_CLIENTE, ID_PRODUTO } = data;
     try {
-      const teste = await this.prisma.sT_LOTE
+      const consulta = await this.prisma.sT_LOTE
         .findMany({
           select: {
             D_DATA_INICIO: true,
@@ -138,6 +142,7 @@ export class LoteService {
                 S_NOME: true,
                 ST_EMPRESA: { select: { S_NOME: true } },
               },
+              where: {ID_CLIENTE, ID_EMPRESA}
             },
             ST_PRODUTO_LOTE: {
               select: {
@@ -154,8 +159,7 @@ export class LoteService {
           orderBy: { D_DATA_INICIO: 'asc' },
         })
         .then((res) => {
-          console.log('res', res.length)
-          const teste =  res.reduce((result,item) => {
+          return res.reduce((result,item) => {
               for (let i = 0; i < item.ST_PRODUTO_LOTE.length; i++) {
                 result.push({
                   PRODUTO: item.ST_PRODUTO_LOTE[i].ST_PRODUTO.S_NOME,
@@ -175,9 +179,11 @@ export class LoteService {
               DATA: string;
             }[],
           );
-          return teste
         });
-      return teste;
+        if (consulta.length > 0) {
+          return consulta
+        }
+        throw new Error('Não foi encontrado movimentação para o filtro selecionado.')
     } catch (error) {
       const _error = error as { message: string };
       throw new Error(_error.message);
