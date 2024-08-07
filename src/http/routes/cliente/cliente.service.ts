@@ -117,7 +117,6 @@ export class ClienteService {
       },
       orderBy: [{ ST_EMPRESA: { S_NOME: 'asc' } }, { S_NOME: 'asc' }],
     });
-    console.dir({ total, data: clientes })
     return { total, data: clientes };
   }
   async attCliente({

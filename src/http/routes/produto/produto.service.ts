@@ -117,6 +117,7 @@ export class ProdutoService {
       const total = await this.prisma.sT_PRODUTO.count({
         where: {
           S_ATIVO,
+          S_NOME: {contains: Search}
         },
       });
       const calculoSkip = parseInt(LimitPerPage) * (Number(Page) - 1);
