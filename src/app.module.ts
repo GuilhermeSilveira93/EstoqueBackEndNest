@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { EnvModule } from './@env/env.module';
 import { envSchema } from './@env/zod/env';
 import { PrismaModule } from './@prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
@@ -15,13 +14,12 @@ import { ClienteModule } from './http/routes/cliente/cliente.module';
 import { LoteModule } from './http/routes/lote/lote.module';
 @Module({
   imports: [
-    EnvModule,
     ConfigModule.forRoot({
       validate: (env) => envSchema.parse(env),
       isGlobal: true,
     }),
-    PrismaModule,
     AuthModule,
+    PrismaModule,
     UsuarioModule,
     ProdutoModule,
     GrupoModule,

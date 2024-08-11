@@ -16,9 +16,9 @@ export const Server = async () => {
     new FastifyAdapter(),
   );
   const envService = app.get(EnvService);
-  
+  const port = envService.get('PORT')
   await app.register(fastifyCookie, {
-    secret: envService.get('JWT_TOKEN'),
+    secret: envService.get('JWT_PRIVATE_KEY'),
   });
   await app.register(helmet);
   app.useGlobalPipes(
@@ -34,6 +34,6 @@ export const Server = async () => {
   });
 
   await app
-    .listen(envService.get('PORT'), '0.0.0.0')
-    .then(() => console.log(`App rodando na porta ${envService.get('PORT')}`));
+    .listen(port, '0.0.0.0')
+    .then(() => console.log(`App rodando na porta ${port}`));
 };

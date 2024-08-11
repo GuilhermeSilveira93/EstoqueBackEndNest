@@ -1,10 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { IsBoolean, MaxLength } from 'class-validator';
+import * as zod from 'zod'
+import { CreateClienteSchema } from './create-cliente.dto';
 
-import { CreateClienteDto } from './create-cliente.dto';
-
-export class UpdateClienteDto extends PartialType(CreateClienteDto) {
-  @IsBoolean()
-  @MaxLength(1)
-  S_ATIVO: boolean;
-}
+export const UpdateClienteSchema = CreateClienteSchema.extend({
+  S_ATIVO: zod.boolean()
+})
+export type UpdateClienteSchemaType = zod.infer<typeof UpdateClienteSchema>

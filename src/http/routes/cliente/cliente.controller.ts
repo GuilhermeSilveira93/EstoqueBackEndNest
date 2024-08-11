@@ -1,12 +1,15 @@
-import { Controller, Get, Res, Req, Patch, Post } from '@nestjs/common';
+import { Controller, Get, Res, Req, Patch, Post, UsePipes, UseGuards } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { ClienteService } from './cliente.service';
-import { CreateClienteDto } from './dto/create-cliente.dto';
+import { CreateClienteSchema, CreateClienteSchemaType } from './dto/create-cliente.dto';
 import { FindClienteDto } from './dto/findCliente.dto';
-import { UpdateClienteDto } from './dto/update-cliente.dto';
+import { UpdateClienteSchema } from './dto/update-cliente.dto';
+import { ZodValidationPipe } from '@/pipes/zod-validation-pipe';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('cliente')
+// @UseGuards(AuthGuard('jwt'))
 export class ClienteController {
   // eslint-disable-next-line no-unused-vars
   constructor(private readonly clienteService: ClienteService) {}
@@ -55,12 +58,13 @@ export class ClienteController {
     }
   }
   @Post()
+  @UsePipes(new ZodValidationPipe(CreateClienteSchema))
   async createCliente(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
-    const data = req.body as CreateClienteDto;
+    const data = req.body;
     try {
       await this.clienteService.createCliente(data);
 
-      return res.status(202).send({ message: 'cliente criada com sucesso !' });
+      return res.status(202).send({ message: 'cliente criado com sucesso !' });
     } catch (error) {
       const _error = error as { message: string };
 
@@ -70,9 +74,10 @@ export class ClienteController {
     }
   }
   @Patch(':ID_CLIENTE')
+  @UsePipes(new ZodValidationPipe(UpdateClienteSchema))
   async attEmpresa(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const params = req.params as { ID_CLIENTE: string };
-    const data = req.body as UpdateClienteDto;
+    const data = req.body;
     try {
       await this.clienteService.attCliente({
         ID_CLIENTE: params.ID_CLIENTE,

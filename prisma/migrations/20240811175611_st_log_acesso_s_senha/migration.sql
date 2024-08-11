@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `st_log_acesso` ADD COLUMN `S_SENHA` VARCHAR(64) NOT NULL DEFAULT '';

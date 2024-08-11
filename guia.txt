@@ -1,0 +1,25 @@
+Controller:
+    Porta de entrada para as requisições, onde as requisições vão bater.
+    usuário faz a requisição e já cai no controller.
+Services:
+    Classes com métodos que os controllers/modulos podem vir usar.
+Decorators:
+    Função que adiciona comportamento a algo, como classes, métodos, propriedades,
+    variaveis. mais abaixo vamos criar uma.
+    sao funções que recebem a linha de baixo como parametro:
+  function MeuDecorator(classe){
+    faço algo com a classe e retorno ela modificada
+  }
+  @MeuDecorator()
+  classe User {
+    constructor(){}
+  }
+Providers:
+  Toda a classe que é um privider, precisa ter o @Injectable() por cima, ou o Nest não validator
+  reconhecer.
+
+
+Gerar chave privada : openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+Gerar chave publica : openssl rsa -pubout -in private_key.pem -out public_key.pem
+Converter para base64 : openssl base64 -in private_key.pem -out private_key_base64.pem
+Converter para base64 : openssl base64 -in public_key.pem -out public_key_base64.pem

@@ -1,9 +1,9 @@
 import { PrismaService } from '@/@prisma/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 
-import { CreateClienteDto } from './dto/create-cliente.dto';
+import { CreateClienteSchemaType } from './dto/create-cliente.dto';
 import { FindClienteDto } from './dto/findCliente.dto';
-import { UpdateClienteDto } from './dto/update-cliente.dto';
+import { UpdateClienteSchemaType } from './dto/update-cliente.dto';
 
 @Injectable()
 export class ClienteService {
@@ -124,7 +124,7 @@ export class ClienteService {
     data,
   }: {
     ID_CLIENTE: string;
-    data: UpdateClienteDto;
+    data: UpdateClienteSchemaType;
   }) {
     try {
       await this.prisma.sT_CLIENTE.update({
@@ -138,7 +138,7 @@ export class ClienteService {
       });
     } catch (error) {}
   }
-  async createCliente(req: CreateClienteDto) {
+  async createCliente(req: CreateClienteSchemaType) {
     const { ID_EMPRESA, S_NOME } = req;
 
     try {
