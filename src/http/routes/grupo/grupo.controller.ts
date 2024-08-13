@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { CreateGrupoDto } from './dto/create-grupo.dto';
 import { GrupoService } from './grupo.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('grupo')
+@UseGuards(AuthGuard('jwt'))
 export class GrupoController {
   constructor(private readonly grupoService: GrupoService) {}
 

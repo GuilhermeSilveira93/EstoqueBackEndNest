@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, Patch, Post } from '@nestjs/common';
+import { Controller, Get, Req, Res, Patch, Post, UseGuards } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
@@ -6,8 +6,10 @@ import { CreateProdutoDTO } from './dto/create-st_produto.dto';
 import { FindProdutoDto } from './dto/findproduto.dto';
 import { UpdateStProdutoDto } from './dto/update-st_produto.dto';
 import { ProdutoService } from './produto.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('produto')
+@UseGuards(AuthGuard('jwt'))
 export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}
   @Post()

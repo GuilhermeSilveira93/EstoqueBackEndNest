@@ -1,12 +1,14 @@
-import { Controller, Post, Body, Req, Res, Get } from '@nestjs/common';
+import { Controller, Post, Body, Req, Res, Get, UseGuards } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { CreateLoteDto } from './dto/create-lote.dto';
 import { LoteService } from './lote.service';
 import { RelatorioEntradaDto } from './dto/relatorio-entrada.dto';
 import { RelatorioSaidaDto } from './dto/relatorio-saida.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('lote')
+@UseGuards(AuthGuard('jwt'))
 export class LoteController {
   constructor(private readonly loteService: LoteService) {}
 

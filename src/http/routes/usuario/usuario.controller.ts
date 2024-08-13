@@ -1,12 +1,14 @@
-import { Controller, Get, Patch, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { CreateUserDTO } from './dto/create-usuario.dto';
 import { FilterUserDto } from './dto/filter-usuario.dto';
 import { UpdateUserDTO } from './dto/update-usuario.dto';
 import { UsuarioService } from './usuario.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('usuario')
+@UseGuards(AuthGuard('jwt'))
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
   @Get()

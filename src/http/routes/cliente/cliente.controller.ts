@@ -1,15 +1,15 @@
-import { Controller, Get, Res, Req, Patch, Post, UsePipes, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, Req, Patch, Post, UsePipes, UseGuards} from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { ClienteService } from './cliente.service';
-import { CreateClienteSchema, CreateClienteSchemaType } from './dto/create-cliente.dto';
+import { CreateClienteSchema } from './dto/create-cliente.dto';
 import { FindClienteDto } from './dto/findCliente.dto';
 import { UpdateClienteSchema } from './dto/update-cliente.dto';
 import { ZodValidationPipe } from '@/pipes/zod-validation-pipe';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('cliente')
-// @UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 export class ClienteController {
   // eslint-disable-next-line no-unused-vars
   constructor(private readonly clienteService: ClienteService) {}

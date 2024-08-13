@@ -1,10 +1,12 @@
-import { Controller, Get, Res, Req, Patch, Post } from '@nestjs/common';
+import { Controller, Get, Res, Req, Patch, Post, UseGuards } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { CreateFornecedorDto } from './dto/create-fornecedor.dto';
 import { UpdateFornecedorDto } from './dto/update-fornecedor.dto';
 import { FornecedorService } from './fornecedor.service';
+import { AuthGuard } from '@nestjs/passport';
 @Controller('fornecedor')
+@UseGuards(AuthGuard('jwt'))
 export class FornecedorController {
   constructor(private readonly fornecedorService: FornecedorService) {}
 

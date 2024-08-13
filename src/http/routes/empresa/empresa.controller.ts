@@ -1,11 +1,13 @@
-import { Controller, Get, Res, Req, Patch, Post } from '@nestjs/common';
+import { Controller, Get, Res, Req, Patch, Post, UseGuards } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { CreateEmpresaDto } from './dto/create-empresa.dto';
 import { UpdateEmpresaDto } from './dto/update-empresa.dto';
 import { EmpresaService } from './empresa.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('empresa')
+@UseGuards(AuthGuard('jwt'))
 export class EmpresaController {
   constructor(private readonly empresaService: EmpresaService) {}
 

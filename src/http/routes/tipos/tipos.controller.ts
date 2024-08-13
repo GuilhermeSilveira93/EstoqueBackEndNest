@@ -1,12 +1,14 @@
-import { Controller, Get, Patch, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { CreateTipoDto } from './dto/createtipo.dto';
 import { FindTipoDto } from './dto/findtipo.dto';
 import { UpdateTipoDto } from './dto/updatetipo.dto';
 import { TiposService } from './tipos.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('tipos')
+@UseGuards(AuthGuard('jwt'))
 export class TiposController {
   constructor(private readonly tiposService: TiposService) {}
 
