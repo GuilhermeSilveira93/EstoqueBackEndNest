@@ -42,7 +42,7 @@ export class AuthService {
           S_PERMITIDO: 'N',
         },
       });
-      throw new UnauthorizedException('E-mail inválido.');
+      throw new UnauthorizedException('INVALID_EMAIL');
     }
     const isPasswordValid = await bcrypt.compare(S_SENHA, user.S_SENHA)
     if(!isPasswordValid) {
@@ -55,7 +55,7 @@ export class AuthService {
           S_PERMITIDO: 'S',
         },
       });
-      throw new UnauthorizedException('Senha inválida.');
+      throw new UnauthorizedException('INVALID_PASSWORD');
     }
     delete user.S_SENHA
     const payload = {
@@ -64,7 +64,7 @@ export class AuthService {
     };
     return {
       token: this.jwtService.sign(payload),
-      message: 'Login realizado com sucesso',
+      message: 'AUTH_SUCCESS',
     };
     
   }
