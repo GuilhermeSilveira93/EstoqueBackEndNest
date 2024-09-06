@@ -129,7 +129,7 @@ export class UsuarioService {
       if (_error.code) {
         switch (_error.code) {
           case 'P2002':
-            throw new Error('Dado já existe no banco de dados', {
+            throw new Error('USER.EXIST', {
               cause: 'Unique constraint failed.',
             });
           default:
@@ -163,7 +163,7 @@ export class UsuarioService {
       if (_error.code) {
         switch (_error.code) {
           case 'P2002':
-            throw new Error('Dado já existe no banco de dados', {
+            throw new Error('USER.EXIST', {
               cause: 'Unique constraint failed.',
             });
           default:

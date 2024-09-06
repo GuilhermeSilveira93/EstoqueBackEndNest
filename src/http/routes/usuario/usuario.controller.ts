@@ -53,7 +53,7 @@ export class UsuarioController {
 
       return res
         .status(202)
-        .send({ message: 'Usuario alterado com sucesso !' });
+        .send({ message: 'USER.ALTERSUCCESS!' });
     } catch (err) {
       const _error = err as { message: string };
 
@@ -70,7 +70,7 @@ export class UsuarioController {
 
       return res
         .status(202)
-        .send({ message: 'Usuario criado com sucesso !', data: response });
+        .send({ message: 'USER.CREATESUCCESS', data: response });
     } catch (err) {
       const _error = err as { message: string };
 

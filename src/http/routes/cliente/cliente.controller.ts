@@ -64,7 +64,7 @@ export class ClienteController {
     try {
       await this.clienteService.createCliente(data);
 
-      return res.status(202).send({ message: 'cliente criado com sucesso !' });
+      return res.status(202).send({ message: 'CLIENTE.CREATESUCCESS' });
     } catch (error) {
       const _error = error as { message: string };
 
@@ -86,7 +86,7 @@ export class ClienteController {
 
       return res
         .status(202)
-        .send({ message: 'Cliente alterado com sucesso !' });
+        .send({ message: 'CLIENTE.ALTERSUCCESS' });
     } catch (error) {
       const _error = error as { message: string };
 

@@ -21,7 +21,7 @@ export class LoteController {
     const { ID_FORNECEDOR } = req.params as { ID_FORNECEDOR?: string };
     try {
       await this.loteService.createEntrada({ data: createLoteDto, ID_FORNECEDOR });
-      res.send({ message: 'Entrada de Produtos realizada com sucesso!' });
+      res.send({ message: 'ENTRY.CREATESUCCESS' });
     } catch (err) {
       const _error = err as { message: string };
 
@@ -39,7 +39,7 @@ export class LoteController {
     const { ID_CLIENTE } = req.params as { ID_CLIENTE: string };
     try {
       await this.loteService.createSaida({ data: createLoteDto, ID_CLIENTE });
-      res.send({ message: 'Saida de Produtos realizada com sucesso!' });
+      res.send({ message: 'EXIT.CREATESUCCESS' });
     } catch (err) {
       const _error = err as { message: string };
 

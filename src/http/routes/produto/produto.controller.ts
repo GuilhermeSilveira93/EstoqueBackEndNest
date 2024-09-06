@@ -17,7 +17,7 @@ export class ProdutoController {
     try {
       await this.produtoService.createProd(req.body as CreateProdutoDTO);
 
-      return res.status(202).send({ message: 'Produto criado com sucesso!' });
+      return res.status(202).send({ message: 'PRODUCT.CREATESUCCESS' });
     } catch (err) {
       const _error = err as { message: string };
 
@@ -102,7 +102,7 @@ export class ProdutoController {
 
       return res
         .status(202)
-        .send({ message: 'Produto alterado com sucesso !' });
+        .send({ message: 'PRODUCT.ALTERSUCCESS' });
     } catch (err) {
       const _error = err as { message: string };
 

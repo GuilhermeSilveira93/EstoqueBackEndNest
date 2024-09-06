@@ -26,7 +26,7 @@ export class ProdutoService {
         if (error.code === 'P2002') {
           switch (error.meta.target) {
             case 'st_produto_S_NOME_key':
-              throw new Error('Produto com este nome já existe');
+              throw new Error('PRODUCT.EXIST');
             default:
               throw new Error(JSON.stringify(err))
           }

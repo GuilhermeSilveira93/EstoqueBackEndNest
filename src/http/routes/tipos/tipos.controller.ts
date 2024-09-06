@@ -52,7 +52,7 @@ export class TiposController {
         data,
       });
 
-      return res.status(202).send({ message: 'Tipo alterado com sucesso !' });
+      return res.status(202).send({ message: 'TYPES.ALTERSUCCESS' });
     } catch (err) {
       const _error = err as { message: string };
 
@@ -66,7 +66,7 @@ export class TiposController {
     try {
       await this.tiposService.createTipo(req.body as CreateTipoDto);
 
-      return res.status(202).send({ message: 'Tipo criado com sucesso!' });
+      return res.status(202).send({ message: 'TYPES.CREATESUCCESS' });
     } catch (err) {
       const _error = err as { message: string };
 

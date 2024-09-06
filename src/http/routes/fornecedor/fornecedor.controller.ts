@@ -42,7 +42,7 @@ export class FornecedorController {
 
       return res
         .status(202)
-        .send({ message: 'Fornecedor atualizado com sucesso!' });
+        .send({ message: 'SUPPLIER.CREATESUCCESS' });
     } catch (error) {
       const _error = error as { message: string };
 
@@ -60,7 +60,7 @@ export class FornecedorController {
 
       return res
         .status(202)
-        .send({ message: 'Fornecedor criado com sucesso!' });
+        .send({ message: 'SUPPLIER.ALTERSUCCESS' });
     } catch (err) {
       const _error = err as { message: string };
 

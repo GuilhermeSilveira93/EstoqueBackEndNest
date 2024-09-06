@@ -45,7 +45,7 @@ export class EmpresaController {
     try {
       await this.empresaService.createEmpresa(data);
 
-      return res.status(202).send({ message: 'Empresa criada com sucesso !' });
+      return res.status(202).send({ message: 'COMPANIE.CREATESUCCESS' });
     } catch (error) {
       const _error = error as { message: string };
 
@@ -66,7 +66,7 @@ export class EmpresaController {
 
       return res
         .status(202)
-        .send({ message: 'Empresa alterado com sucesso !' });
+        .send({ message: 'COMPANIE.ALTERSUCCESS' });
     } catch (error) {
       const _error = error as { message: string };
 

@@ -28,7 +28,7 @@ export class GrupoController {
 
       return res
         .status(202)
-        .send({ message: 'Grupo Criado com sucesso', data: resultado });
+        .send({ message: 'GROUP.CREATESUCCESS', data: resultado });
     } catch (error) {
       return res.status(404).send();
     }

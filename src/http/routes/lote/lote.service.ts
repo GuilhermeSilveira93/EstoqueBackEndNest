@@ -124,7 +124,7 @@ export class LoteService {
         if (consulta.length > 0) {
           return consulta
         }
-        throw new Error('Não foi encontrado movimentação para o filtro selecionado.')
+        throw new Error('REPORTS.ENTRY.NOTFOUND')
     } catch (error) {
       const _error = error as { message: string };
       throw new Error(_error.message);
@@ -183,7 +183,7 @@ export class LoteService {
         if (consulta.length > 0) {
           return consulta
         }
-        throw new Error('Não foi encontrado movimentação para o filtro selecionado.')
+        throw new Error('REPORTS.EXIT.NOTFOUND')
     } catch (error) {
       const _error = error as { message: string };
       throw new Error(_error.message);
